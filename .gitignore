@@ -32,3 +32,29 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+PetSearch/front/node_modules
+PetSearch/front/.pnp
+PetSearch/front/.pnp.js
+
+# testing
+PetSearch/front/coverage
+
+# production
+PetSearch/front/build
+
+# misc
+PetSearch/front/.DS_Store
+PetSearch/front/.env.local
+PetSearch/front/.env.development.local
+PetSearch/front.env.test.local
+PetSearch/front/.env.production.local
+
+PetSearch/front/npm-debug.log*
+PetSearch/front/yarn-debug.log*
+PetSearch/front/yarn-error.log*
+
+PetSearch/front/package-lock.json
