@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetSearch.Models;
 
 namespace PetSearch.Repositories
 {
@@ -8,5 +9,8 @@ namespace PetSearch.Repositories
         {
             
         }
+        
+        public DbSet<UserAuth> UsersAuth { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PetSearch.Repositories;
+using PetSearch.Repositories.Abstractions;
+using PetSearch.Services;
+using PetSearch.Services.Abstractions;
 
 namespace PetSearch;
 
@@ -17,8 +21,13 @@ public static class Program
         }
         
         app.MapControllers();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+        
         app.UseSwagger();
         app.UseSwaggerUI();
+        
         app.Run();
     }
 
@@ -26,11 +35,21 @@ public static class Program
     {
         services.AddControllers();
         services.AddSwaggerGen();
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+            options =>
+            {
+                options.Cookie.Name = "auth";
+                options.Cookie.HttpOnly = false;
+            });
 
         services.AddDbContext<WebApplicationDbContext>(optionsBuilder =>
         {
             var connectionString = configuration.GetConnectionString("Postgres");
             optionsBuilder.UseNpgsql(connectionString);
         });
+        
+        services.AddScoped<IAuthRepository, AuthRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAuthService, AuthService>();
     }
 }

@@ -20,5 +20,7 @@ namespace PetSearch.Repositories
         Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
         Task RemoveAsync(TEntity entity);
         Task RemoveRangeAsync(IEnumerable<TEntity> entities);
+        Task<bool> Any(Expression<Func<TEntity, bool>> expression);
+        Task SaveChangesAsync();
     }
 }

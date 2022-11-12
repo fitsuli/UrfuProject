@@ -83,5 +83,18 @@ namespace PetSearch.Repositories
             items.RemoveRange(entities);
             return Task.CompletedTask;
         }
+
+        public Task<bool> Any(Expression<Func<TEntity, bool>> expression)
+        {
+            return items.AnyAsync(expression);
+        }
+
+        public Task SaveChangesAsync()
+        {
+            if (ReadOnly)
+                throw new InvalidOperationException();
+
+            return Context.SaveChangesAsync();
+        }
     }
 }
