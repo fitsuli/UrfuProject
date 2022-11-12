@@ -18,12 +18,14 @@ public static class Program
         
         app.MapControllers();
         app.UseSwagger();
+        app.UseSwaggerUI();
         app.Run();
     }
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers();
+        services.AddSwaggerGen();
 
         services.AddDbContext<WebApplicationDbContext>(optionsBuilder =>
         {
