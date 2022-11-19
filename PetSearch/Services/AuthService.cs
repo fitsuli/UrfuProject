@@ -41,7 +41,8 @@ namespace PetSearch.Services
 
             var user = new User
             {
-                FullName = registrationDto.FullName
+                FullName = registrationDto.FullName,
+                Role = registrationDto.Role
             };
 
             await userRepository.AddAsync(user, CancellationToken.None);

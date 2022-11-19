@@ -4,7 +4,7 @@ namespace PetSearch.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class FindController : ControllerBase
+    public class SearchController : ControllerBase
     {
     
     }
