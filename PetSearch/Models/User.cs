@@ -6,5 +6,6 @@ namespace PetSearch.Models
     {
         public string FullName { get; set; }
         public Role Role { get; set; }
+        public string? Phone { get; set; }
     }
 }

@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {getCookie, removeCookie} from "typescript-cookie";
-import {loginRequest, registrationRequest, signedInUserRequest} from "../../Utils/Requests";
+import {signInRequest, signUpRequest, signedInUserRequest} from "../../Utils/Requests";
 import {User} from "../../Models/User";
-import {RegistrationModel} from "../../Models/RegistrationModel";
+import {SignUpModel} from "../../Models/SignUpModel";
 import {useQueryClient} from "react-query";
 
 interface AuthContextType {
     isAuthorized: boolean
     signIn: (login: string, password: string) => Promise<Response>
     signOut: () => void
-    signUp: (dto: RegistrationModel) => Promise<Response>
+    signUp: (dto: SignUpModel) => Promise<Response>
     user: User
 }
 
@@ -39,7 +39,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     }
 
     let signIn = (login: string, password: string) => {
-        return loginRequest(login, password)
+        return signInRequest(login, password)
             .then(resp => {
                 if (resp.ok) {
                     setCookieState(true)
@@ -54,8 +54,8 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         queryClient.removeQueries()
     }
 
-    let signUp = (dto: RegistrationModel) => {
-        return registrationRequest(dto)
+    let signUp = (dto: SignUpModel) => {
+        return signUpRequest(dto)
             .then(resp => {
                 if (resp.ok) {
                     setCookieState(true)

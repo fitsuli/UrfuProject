@@ -2,7 +2,7 @@
 
 namespace PetSearch.Models.DTO
 {
-    public class RegistrationDto
+    public class SignUpDto
     {
         public string FullName { get; set; }
         public string Login { get; set; }

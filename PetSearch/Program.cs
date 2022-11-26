@@ -84,8 +84,10 @@ public static class Program
 
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ILostAnimalRepository, LostAnimalRepository>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ILostAnimalService, LostAnimalService>();
     }
 
     private static void ConfigureSpa(IServiceCollection services)

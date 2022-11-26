@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetSearch.Repositories;
@@ -11,9 +12,10 @@ using PetSearch.Repositories;
 namespace PetSearch.Migrations
 {
     [DbContext(typeof(WebApplicationDbContext))]
-    partial class WebApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221126110535_UpdatedModels")]
+    partial class UpdatedModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,9 +45,6 @@ namespace PetSearch.Migrations
                     b.Property<string>("LostArea")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("LostDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

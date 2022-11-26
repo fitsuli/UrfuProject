@@ -1,15 +1,14 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../App.css';
-import {Button, Card, createTheme, FormControlLabel, Radio, RadioGroup, TextField, ThemeProvider} from "@mui/material";
+import {Button, Card, FormControlLabel, Radio, RadioGroup, TextField, ThemeProvider, useTheme} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "./AuthProvider";
-import {RegistrationModel} from "../../Models/RegistrationModel";
+import {SignUpModel} from "../../Models/SignUpModel";
 import {BackgroundTintStyle} from "../../Styles/SxStyles";
-import {blue, red} from "@mui/material/colors";
 
 
 export const SignUp = () => {
-    const [model, setModel] = useState<RegistrationModel>(
+    const [model, setModel] = useState<SignUpModel>(
         {
             fullName: "",
             role: "Admin",
@@ -21,27 +20,13 @@ export const SignUp = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const navigate = useNavigate()
     const auth = useAuth()
-
-    const [color, setColor] = useState(blue[700].toString())
-    const theme = useMemo(
-        () =>
-            createTheme({
-                palette: {
-                    primary: {main: color},
-                },
-            }),
-        [color],
-    );
+    const theme = useTheme()
 
     useEffect(() => {
         if (auth.isAuthorized) {
             navigate("/home", {replace: true})
         }
     })
-
-    useEffect(() => {
-        setColor(model.role == "Admin" ? red[500] : blue[700])
-    }, [model.role]) // TODO: мб убрать
 
 
     const location = useLocation();
@@ -52,7 +37,7 @@ export const SignUp = () => {
         setModel({...model, [prop]: event.target.value});
     };
 
-    const onSignUp = (model: RegistrationModel) => {
+    const onSignUp = (model: SignUpModel) => {
         auth.signUp(model)
             .then(async resp => {
                 if (!resp.ok) {
@@ -65,7 +50,6 @@ export const SignUp = () => {
     }
 
     return <div className="auth-container">
-        <ThemeProvider theme={theme}>
             <Card variant={"outlined"} className="auth-card" sx={BackgroundTintStyle}>
                 <div className="auth">
                     <TextField label="ФИО" onChange={handleChange("fullName")} id={"fullName"}/>
@@ -91,6 +75,5 @@ export const SignUp = () => {
                 </div>
                 <div className="error">{errorMessage}</div>
             </Card>
-        </ThemeProvider>
     </div>
 }

@@ -1,4 +1,4 @@
-export type RegistrationModel = {
+export type SignUpModel = {
     role: string,
     login: string,
     password: string,

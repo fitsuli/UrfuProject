@@ -33,16 +33,16 @@ namespace PetSearch.Services
             return OperationResult.Success();
         }
         
-        public async Task<OperationResult> SignUp(HttpContext httpContext, RegistrationDto registrationDto)
+        public async Task<OperationResult> SignUp(HttpContext httpContext, SignUpDto signUpDto)
         {
-            var isUserExists = await authRepository.Any(userAuth => userAuth.Login == registrationDto.Login);
+            var isUserExists = await authRepository.Any(userAuth => userAuth.Login == signUpDto.Login);
             if (isUserExists)
                 return OperationResult.Failure("Пользователь с таким логином уже зарегестрирован");
 
             var user = new User
             {
-                FullName = registrationDto.FullName,
-                Role = registrationDto.Role
+                FullName = signUpDto.FullName,
+                Role = signUpDto.Role
             };
 
             await userRepository.AddAsync(user, CancellationToken.None);
@@ -50,8 +50,8 @@ namespace PetSearch.Services
 
             var userAuth = new UserAuth
             {
-                Login = registrationDto.Login,
-                Password = registrationDto.Password,
+                Login = signUpDto.Login,
+                Password = signUpDto.Password,
                 UserId = user.Id
             };
 

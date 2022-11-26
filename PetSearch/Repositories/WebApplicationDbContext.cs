@@ -12,5 +12,6 @@ namespace PetSearch.Repositories
         
         public DbSet<UserAuth> UsersAuth { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<LostAnimalEntity> LostAnimals { get; set; }
     }
 }

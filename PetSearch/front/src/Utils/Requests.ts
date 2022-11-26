@@ -1,7 +1,7 @@
 import settings from "../settings.json";
-import {RegistrationModel} from "../Models/RegistrationModel";
+import {SignUpModel} from "../Models/SignUpModel";
 
-export const loginRequest = (login: string, password: string) => {
+export const signInRequest = (login: string, password: string) => {
     return fetch(settings.serverEndpoint + "/auth/signIn", {
         method: "POST",
         headers: {
@@ -11,13 +11,13 @@ export const loginRequest = (login: string, password: string) => {
     });
 }
 
-export const registrationRequest = (registrationDto: RegistrationModel) => {
+export const signUpRequest = (signUpDto: SignUpModel) => {
     return fetch(settings.serverEndpoint + "/auth/signUp", {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
         }),
-        body: JSON.stringify(registrationDto)
+        body: JSON.stringify(signUpDto)
     })
 }
 

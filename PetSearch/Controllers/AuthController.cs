@@ -16,9 +16,9 @@ namespace PetSearch.Controllers
         }
 
         [HttpPost("signUp")]
-        public async Task<IActionResult> SignUp([FromBody] RegistrationDto registrationDto)
+        public async Task<IActionResult> SignUp([FromBody] SignUpDto signUpDto)
         {
-            var singUpResult = await authService.SignUp(HttpContext, registrationDto);
+            var singUpResult = await authService.SignUp(HttpContext, signUpDto);
             if (!singUpResult.IsSuccessful)
                 return BadRequest(singUpResult.ErrorMessage);
 
