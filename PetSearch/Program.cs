@@ -75,6 +75,7 @@ public static class Program
             {
                 options.Cookie.Name = "auth";
                 options.Cookie.HttpOnly = false;
+                options.LoginPath = PathString.Empty;
                 options.AccessDeniedPath = PathString.Empty;
                 options.Events.OnRedirectToLogin = context =>
                 {
