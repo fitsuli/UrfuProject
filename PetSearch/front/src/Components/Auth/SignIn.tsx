@@ -15,11 +15,11 @@ const SignIn = () => {
     const navigate = useNavigate()
     const location = useLocation();
     // @ts-ignore
-    const from = location.state?.from?.pathname?.startsWith("/invite") ? location.state?.from : "/home";
+    const from = location.state?.from?.pathname?.startsWith("/invite") ? location.state?.from : "/lost";
 
     useEffect(() => {
         if (auth.isAuthorized) {
-            navigate("/home", {replace: true})
+            navigate("/lost", {replace: true})
         }
     })
 

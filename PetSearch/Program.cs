@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -74,6 +75,12 @@ public static class Program
             {
                 options.Cookie.Name = "auth";
                 options.Cookie.HttpOnly = false;
+                options.AccessDeniedPath = PathString.Empty;
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Task.CompletedTask;
+                };
             });
 
         services.AddDbContext<WebApplicationDbContext>(optionsBuilder =>

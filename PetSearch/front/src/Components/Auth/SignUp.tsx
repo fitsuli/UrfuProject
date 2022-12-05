@@ -24,14 +24,14 @@ export const SignUp = () => {
 
     useEffect(() => {
         if (auth.isAuthorized) {
-            navigate("/home", {replace: true})
+            navigate("/lost", {replace: true})
         }
     })
 
 
     const location = useLocation();
     // @ts-ignore
-    const from = location.state?.from || "/home";
+    const from = location.state?.from || "/lost";
 
     const handleChange = (prop: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setModel({...model, [prop]: event.target.value});
@@ -44,7 +44,7 @@ export const SignUp = () => {
                     let errorMessage = await resp.text()
                     setErrorMessage(errorMessage)
                 } else {
-                    navigate("/home")
+                    navigate("/lost")
                 }
             })
     }
