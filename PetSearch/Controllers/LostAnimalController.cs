@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PetSearch.Models;
+using PetSearch.Common.Extensions;
+using PetSearch.Models.DTO;
 using PetSearch.Services.Abstractions;
 
 namespace PetSearch.Controllers;
@@ -17,6 +18,13 @@ public class LostAnimalController : ControllerBase
     {
         this.lostAnimalService = lostAnimalService;
     }
+    
+    [HttpGet]
+    public async Task<ActionResult> GetAll()
+    {
+        var lostAnimals = await lostAnimalService.GetLostAnimals();
+        return Ok(lostAnimals);
+    }
 
     [HttpGet("{lostAnimalId}")]
     public async Task<ActionResult> GetLostAnimalById([FromRoute] string lostAnimalId)
@@ -29,14 +37,18 @@ public class LostAnimalController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateLostAnimal(LostAnimalEntity lostAnimalEntity)
+    public async Task<ActionResult> CreateLostAnimal(LostAnimalEntityDto lostAnimalEntityDto)
     {
-        var createResult = await lostAnimalService.CreateLostAnimalEntity(lostAnimalEntity);
+        var userId = HttpContext.GetUserId();
+        if (userId == null)
+            return BadRequest();
+        
+        var createResult = await lostAnimalService.CreateLostAnimalEntity(lostAnimalEntityDto, userId.Value);
         if (!createResult.IsSuccessful)
         {
             return BadRequest(createResult.ErrorMessage);
         }
 
-        return Ok();
+        return Ok(createResult.Result);
     }
 }

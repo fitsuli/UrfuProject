@@ -64,7 +64,6 @@ namespace PetSearch.Repositories
         {
             var entry = await items.AddAsync(entity, cancellationToken);
             return entry.Entity;
-
         }
 
         public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)

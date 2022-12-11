@@ -5,4 +5,5 @@ export type LostAnimalEntity = {
     lostDate: string;
     description: string;
     userId: string;
+    id: string;
 }

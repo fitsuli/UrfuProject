@@ -1,5 +1,6 @@
 ﻿using PetSearch.Common;
 using PetSearch.Models;
+using PetSearch.Models.DTO;
 using PetSearch.Repositories.Abstractions;
 using PetSearch.Services.Abstractions;
 
@@ -14,22 +15,37 @@ public class LostAnimalService : ILostAnimalService
         this.repository = repository;
     }
 
+    public async Task<IEnumerable<LostAnimalEntity>> GetLostAnimals()
+    {
+        return await repository.Query(x => x, CancellationToken.None);
+    }
+
     public async Task<LostAnimalEntity?> GetLostAnimalEntity(Guid id)
     {
         return await repository.FirstOrDefaultAsync(lostAnimal => lostAnimal.Id == id, CancellationToken.None);
     }
 
-    public async Task<OperationResult> CreateLostAnimalEntity(LostAnimalEntity lostAnimalEntity)
+    public async Task<OperationResult<LostAnimalEntity>> CreateLostAnimalEntity(LostAnimalEntityDto lostAnimalEntityDto, Guid userId)
     {
+        var lostAnimalEntity = new LostAnimalEntity()
+        {
+            AnimalName = lostAnimalEntityDto.AnimalName,
+            AnimalType = lostAnimalEntityDto.AnimalType,
+            LostArea = lostAnimalEntityDto.LostArea,
+            Description = lostAnimalEntityDto.Description,
+            LostDate = lostAnimalEntityDto.LostDate,
+            UserId = userId
+        };
+        
         try
         {
-            await repository.AddAsync(lostAnimalEntity, CancellationToken.None);
+            var result = await repository.AddAsync(lostAnimalEntity, CancellationToken.None);
             await repository.SaveChangesAsync();
-            return OperationResult.Success();
+            return OperationResult<LostAnimalEntity>.Success(result);
         }
         catch (Exception)
         {
-            return OperationResult.Failure("Failed to create lostAnimalEntity");
+            return OperationResult<LostAnimalEntity>.Failure("Failed to create lostAnimalEntity");
         }
     }
 }

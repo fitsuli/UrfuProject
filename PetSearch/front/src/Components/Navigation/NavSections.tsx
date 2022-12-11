@@ -1,4 +1,4 @@
-import { Box, List, ListItemText } from '@mui/material';
+import { Box, List } from '@mui/material';
 import { NavConfigItem } from './NavConfig';
 import { NavItem } from './NavItems';
 

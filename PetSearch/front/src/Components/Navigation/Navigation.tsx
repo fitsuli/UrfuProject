@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { styled, alpha, useTheme } from '@mui/material/styles';
+import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 import useResponsive from '../../Hooks/useResponsive';
 import stringAvatar from '../../Utils/AvatarString';
 import Logo from '../Logo';
 import { useAuth } from '../Auth/AuthProvider';
 import NavSection from './NavSections';
 import { NavConfig } from './NavConfig';
+import { fontWeight } from '@mui/system';
 
 const NAV_WIDTH = 280;
 
@@ -15,7 +16,7 @@ const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
-  borderRadius: Number(theme.shape.borderRadius) * 1.5,
+  borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
@@ -23,6 +24,7 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'lg');
   const auth = useAuth()
+  const theme = useTheme()
   const user = auth.user
 
   useEffect(() => {
@@ -40,6 +42,10 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
     >
       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
         <Logo />
+        <Typography sx={{
+          color: theme.palette.primary.main,
+          fontWeight: 'fontWeightBold'
+        }}>Pet Search</Typography>
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
