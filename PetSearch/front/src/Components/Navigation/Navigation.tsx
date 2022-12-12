@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { styled, alpha, useTheme } from '@mui/material/styles';
-import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
+import { Box, Link, Drawer, Typography, Avatar, Button, Stack } from '@mui/material';
 import useResponsive from '../../Hooks/useResponsive';
 import stringAvatar from '../../Utils/AvatarString';
 import Logo from '../Logo';
 import { useAuth } from '../Auth/AuthProvider';
 import NavSection from './NavSections';
 import { NavConfig } from './NavConfig';
-import { fontWeight } from '@mui/system';
 
 const NAV_WIDTH = 280;
 
@@ -16,7 +15,7 @@ const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: theme.shape.borderRadius * 1.5,
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
@@ -52,9 +51,8 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
         <Link underline="none">
           <StyledAccount>
             <Avatar  {...stringAvatar(user ? user.fullName : "A A")} />
-
             <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
+              <Typography variant="subtitle2" sx={{ color: 'text.primary', fontWeight: '600' }}>
                 {user ? user.fullName : null}
               </Typography>
 
@@ -69,6 +67,17 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
       <NavSection data={NavConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
+      <Button sx={{
+        borderRadius: "8px",
+        position: "fixed",
+        bottom: 0,
+        margin: 4,
+        width: NAV_WIDTH - 64
+      }}
+        variant={"outlined"} 
+        onClick={() => auth.signOut()}>
+        Выйти
+      </Button>
     </Box>
   );
 

@@ -11,7 +11,7 @@ export default function ThemeProvider({ children } : {children: JSX.Element}) {
             palette: {primary: { main: green[600].toString() }}, 
             customShadows: customShadows(),
             shadows: shadows(),
-            shape: { borderRadius: 12 }
+            shape: { borderRadius: 8 }
         }),
         []
     );

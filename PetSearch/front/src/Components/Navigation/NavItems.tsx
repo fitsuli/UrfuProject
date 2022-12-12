@@ -2,9 +2,10 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
 import { StyledNavItem, StyledNavItemIcon } from './StyledNavItem';
 import { alpha, useTheme } from '@mui/material';
+import { NavConfigItem } from './NavConfig';
 
-export const NavItem = ({ item } : {item : any}) => {
-    const { title, path, icon, info } = item;
+export const NavItem = ({ item } : {item : NavConfigItem}) => {
+    const { title, path, icon } = item;
     const theme = useTheme()
     
     return (
@@ -24,7 +25,6 @@ export const NavItem = ({ item } : {item : any}) => {
   
         <ListItemText disableTypography primary={title} />
   
-        {info && info}
       </StyledNavItem>
     );
   }

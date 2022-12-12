@@ -18,7 +18,7 @@ export default function Card(theme: any) {
         },
         styleOverrides: {
           root: {
-            padding: theme.spacing(3, 3, 0),
+            padding: theme.spacing(3, 3, 0, 3, 3),
           },
         },
       },

@@ -10,17 +10,17 @@ export type NavConfigItem = {
 
 export const NavConfig : Array<NavConfigItem> = [
     {
-        title: 'Lost',
+        title: 'Потеряшки',
         path: '/lost',
         icon: <SearchRoundedIcon />
     },
     {
-        title: 'Found',
+        title: 'Найденные',
         path: '/found',
         icon: <NearMeRoundedIcon />
     },
     {
-        title: 'Shelter',
+        title: 'Приюты',
         path: '/shelter',
         icon: <NightShelterRoundedIcon />
     }

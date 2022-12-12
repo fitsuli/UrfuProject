@@ -51,7 +51,7 @@ export const OnHoverColoredStyle = {
 }
 
 export const BackgroundTintStyle = {
-    // bgcolor: 'rgba(25, 118, 210, 0.02)'
+    border: 'solid 1px rgba(67, 160, 71, 0.4)',
     bgcolor: '#FAFAFA'
 }
 
