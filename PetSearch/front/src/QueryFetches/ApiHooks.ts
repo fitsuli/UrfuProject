@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { useQuery } from "react-query"
+import { useMutation, useQuery, useQueryClient } from "react-query"
 import { LostAnimalEntity } from "../Models/LostAnimalEntity"
 import delay from "delay"
 
@@ -8,5 +8,22 @@ export const useLostAnimalsQuery = () =>{
         await delay(500);
         const result = await axios.get('lostAnimal');
         return result.data;
+    })
+}
+
+export const useSaveLostAnimalMutation = (onSuccess: () => void) =>{
+    const queryClient = useQueryClient()
+
+    return useMutation<LostAnimalEntity, AxiosError, LostAnimalEntity>(async (animal) => {
+        const res = await axios.post('lostAnimal', animal)
+        return res.data
+    }, {
+        onSuccess(data) {
+            queryClient.setQueryData<LostAnimalEntity[]>("lostAnimals", lostAnimals => {
+                lostAnimals.push(data)
+                return [...lostAnimals]
+            })
+            if (onSuccess) onSuccess()
+        }
     })
 }

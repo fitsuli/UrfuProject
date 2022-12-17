@@ -16,11 +16,15 @@ export const ModalStyle = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     padding: '32px',
+
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1em'
 };
 
 export const FullScreenStyle = {
-    width: '90%',
-    height: '90%'
+    width: '70%',
+    height: '80%'
 }
 
 export const RoundedStyle = {

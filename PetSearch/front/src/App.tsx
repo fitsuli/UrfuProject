@@ -10,6 +10,10 @@ import BaseLayout from "./Components/Templates/BaseLayout";
 import { LostAnimalsPage } from "./Components/Pages/LostAnimalsPage";
 import { FoundAnimalsPage } from "./Components/Pages/FoundAnimalsPage";
 import { AnimalsShelterPage } from "./Components/Pages/AnimalsShelterPage";
+import { SnackbarProvider } from "notistack";
+import { Grow } from "@mui/material";
+import {LocalizationProvider,} from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 
 axios.defaults.baseURL = 'https://localhost:7257/api'
 
@@ -41,7 +45,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ThemeProvider>
-          {routes}
+          <SnackbarProvider anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }} TransitionComponent={Grow}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              {routes}
+            </LocalizationProvider>
+          </SnackbarProvider>
         </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>

@@ -4,6 +4,6 @@ export type LostAnimalEntity = {
     lostArea: string;
     lostDate: string;
     description: string;
-    userId: string;
-    id: string;
+    userId?: string;
+    id?: string;
 }
