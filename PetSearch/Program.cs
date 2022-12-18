@@ -2,10 +2,13 @@ using System.Net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using PetSearch.Repositories;
 using PetSearch.Repositories.Abstractions;
 using PetSearch.Services;
 using PetSearch.Services.Abstractions;
+using PetSearch.Services.Providers;
+using PetSearch.Services.Providers.Abstractions;
 
 namespace PetSearch;
 
@@ -14,7 +17,7 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        ConfigureServices(builder.Services, builder.Configuration);
+        ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -29,6 +32,22 @@ public static class Program
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+
+        foreach (var section in builder.Configuration.GetSection("StaticFilesDirectories").GetChildren())
+        {
+            var directoryPath = Path.Combine(builder.Environment.ContentRootPath, "StaticFiles", section.Value);
+            if (!Directory.Exists(directoryPath))
+                Directory.CreateDirectory(directoryPath);
+        }
+        
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(builder.Environment.ContentRootPath,
+                    "StaticFiles", 
+                    builder.Configuration.GetSection("StaticFilesDirectories")["LostAnimalsFileDirectory"])),
+            RequestPath = "/LostAnimalsImages"
+        });
 
         if (app.Environment.IsProduction())
         {
@@ -64,7 +83,8 @@ public static class Program
         app.Run();
     }
 
-    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureServices(IServiceCollection services, IConfiguration configuration,
+        IWebHostEnvironment environment)
     {
         ConfigureSpa(services);
 
@@ -96,6 +116,10 @@ public static class Program
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ILostAnimalService, LostAnimalService>();
+
+        services.AddScoped<ILostAnimalsFileProvider>(ctx => new LostAnimalsFileProvider(
+            configuration["LostAnimalsFileDirectory"],
+            ctx.GetService<IWebHostEnvironment>()));
     }
 
     private static void ConfigureSpa(IServiceCollection services)

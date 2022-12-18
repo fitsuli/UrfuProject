@@ -6,7 +6,7 @@ import delay from "delay"
 export const useLostAnimalsQuery = () =>{
     return useQuery<LostAnimalEntity[], AxiosError>('lostAnimals', async () => {
         await delay(500);
-        const result = await axios.get('lostAnimal');
+        const result = await axios.get('lostAnimals');
         return result.data;
     })
 }
@@ -15,7 +15,7 @@ export const useSaveLostAnimalMutation = (onSuccess: () => void) =>{
     const queryClient = useQueryClient()
 
     return useMutation<LostAnimalEntity, AxiosError, LostAnimalEntity>(async (animal) => {
-        const res = await axios.post('lostAnimal', animal)
+        const res = await axios.post('lostAnimals', animal)
         return res.data
     }, {
         onSuccess(data) {

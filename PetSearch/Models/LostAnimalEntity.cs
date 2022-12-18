@@ -8,4 +8,5 @@ public class LostAnimalEntity : BaseEntity
     public string Description { get; set; }
     public DateTime LostDate { get; set; }
     public Guid UserId { get; set; }
+    public string FileNames { get; set; }
 }

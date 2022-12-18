@@ -40,6 +40,10 @@ namespace PetSearch.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FileNames")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("LostArea")
                         .IsRequired()
                         .HasColumnType("text");

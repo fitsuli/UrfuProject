@@ -10,11 +10,11 @@ namespace PetSearch.Controllers;
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
 [ApiController]
-public class LostAnimalController : ControllerBase
+public class LostAnimalsController : ControllerBase
 {
     private readonly ILostAnimalService lostAnimalService;
     
-    public LostAnimalController(ILostAnimalService lostAnimalService)
+    public LostAnimalsController(ILostAnimalService lostAnimalService)
     {
         this.lostAnimalService = lostAnimalService;
     }
@@ -33,17 +33,20 @@ public class LostAnimalController : ControllerBase
             return BadRequest();
 
         var lostAnimal = await lostAnimalService.GetLostAnimalEntity(lostAnimalGuid);
+        if (lostAnimal == null)
+            return NotFound();
+        
         return Ok(lostAnimal);
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateLostAnimal(LostAnimalEntityDto lostAnimalEntityDto)
+    public async Task<ActionResult> CreateLostAnimal([FromForm] CreateLostAnimalEntityDto createLostAnimalEntityDto)
     {
         var userId = HttpContext.GetUserId();
         if (userId == null)
             return BadRequest();
         
-        var createResult = await lostAnimalService.CreateLostAnimalEntity(lostAnimalEntityDto, userId.Value);
+        var createResult = await lostAnimalService.CreateLostAnimalEntity(createLostAnimalEntityDto, userId.Value);
         if (!createResult.IsSuccessful)
         {
             return BadRequest(createResult.ErrorMessage);
