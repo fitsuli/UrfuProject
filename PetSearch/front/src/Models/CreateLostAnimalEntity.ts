@@ -1,10 +1,10 @@
-export type LostAnimalEntity = {
+export type CreateLostAnimalEntityDto = {
     animalName: string;
     animalType: string;
     lostArea: string;
     lostDate: string;
     description: string;
-    fileNames: string[];
+    files: File[];
     userId?: string;
     id?: string;
 }

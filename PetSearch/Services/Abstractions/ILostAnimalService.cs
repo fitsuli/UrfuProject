@@ -6,7 +6,7 @@ namespace PetSearch.Services.Abstractions;
 
 public interface ILostAnimalService
 {
-    Task<IEnumerable<LostAnimalEntity>> GetLostAnimals();
+    Task<IEnumerable<LostEnimalEntityDto>> GetLostAnimals();
     Task<LostEnimalEntityDto?> GetLostAnimalEntity(Guid id);
-    Task<OperationResult<LostAnimalEntity>> CreateLostAnimalEntity(CreateLostAnimalEntityDto createLostAnimalEntityDto, Guid userId);
+    Task<OperationResult<LostEnimalEntityDto>> CreateLostAnimalEntity(CreateLostAnimalEntityDto createLostAnimalEntityDto, Guid userId);
 }

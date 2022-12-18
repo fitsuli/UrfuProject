@@ -14,7 +14,7 @@ export const LostAnimalCard: React.FC<{
         <Card>
             <Box sx={{
                 height: "300px",
-                backgroundImage: "url(https://pic.rutubelist.ru/user/65/0c/650c6116e859d34154a1629f05e7c435.jpg)",
+                backgroundImage: animal.fileNames?.length ? `url(/LostAnimalsImages/${animal.fileNames[0]})` : "url(https://www.freeiconspng.com/thumbs/animal-icon-png/animal-paw-vector-icon-animals-icons-icons-download-0.png)",
                 backgroundPosition: "center center",
                 backgroundSize: "cover"
             }} />

@@ -17,7 +17,7 @@ export const LostAnimalsPage: React.FC = () => {
         <Grid container spacing={3}>
             {lostAnimals!.map((animal: LostAnimalEntity) =>
                 <Grid key={animal.id} item xs={12} sm={6} md={3}>
-                    <LostAnimalCard animal={animal} />
+                    <LostAnimalCard key={animal.id} animal={animal} />
                 </Grid>)}
         </Grid>
 

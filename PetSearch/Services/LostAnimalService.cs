@@ -18,9 +18,10 @@ public class LostAnimalService : ILostAnimalService
         this.fileProvider = fileProvider;
     }
 
-    public async Task<IEnumerable<LostAnimalEntity>> GetLostAnimals()
+    public async Task<IEnumerable<LostEnimalEntityDto>> GetLostAnimals()
     {
-        return await repository.Query(x => x, CancellationToken.None);
+        var lostAnimals = await repository.Query(x => x, CancellationToken.None); 
+        return lostAnimals.Select(animal => new LostEnimalEntityDto(animal));
     }
 
     public async Task<LostEnimalEntityDto?> GetLostAnimalEntity(Guid id)
@@ -29,13 +30,13 @@ public class LostAnimalService : ILostAnimalService
         return lostAnimal == null ? null : new LostEnimalEntityDto(lostAnimal);
     }
 
-    public async Task<OperationResult<LostAnimalEntity>> CreateLostAnimalEntity(
+    public async Task<OperationResult<LostEnimalEntityDto>> CreateLostAnimalEntity(
         CreateLostAnimalEntityDto createLostAnimalEntityDto,
         Guid userId)
     {
         var uploadFilesResult = await fileProvider.UploadFiles(createLostAnimalEntityDto.Images);
         if (!uploadFilesResult.IsSuccessful)
-            return OperationResult<LostAnimalEntity>.Failure(uploadFilesResult.ErrorMessage);
+            return OperationResult<LostEnimalEntityDto>.Failure(uploadFilesResult.ErrorMessage);
 
         var fileNames = uploadFilesResult.Result;
         
@@ -54,11 +55,12 @@ public class LostAnimalService : ILostAnimalService
         {
             var result = await repository.AddAsync(lostAnimalEntity, CancellationToken.None);
             await repository.SaveChangesAsync();
-            return OperationResult<LostAnimalEntity>.Success(result);
+            var createdLostAnimal = new LostEnimalEntityDto(result);
+            return OperationResult<LostEnimalEntityDto>.Success(createdLostAnimal);
         }
         catch (Exception)
         {
-            return OperationResult<LostAnimalEntity>.Failure("Failed to create lostAnimalEntity");
+            return OperationResult<LostEnimalEntityDto>.Failure("Failed to create lostAnimalEntity");
         }
     }
 }

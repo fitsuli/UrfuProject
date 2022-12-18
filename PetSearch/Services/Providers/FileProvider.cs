@@ -7,7 +7,7 @@ public class FileProvider : IFileProvider
 {
     private readonly string filesDirectory;
     private readonly string baseDirectoryPath;
-    private readonly string[] permittedExtensions = { ".png", ".jpg", ".bmp" };
+    private readonly string[] permittedExtensions = { ".png", ".jpg", ".bmp", ".jpeg", ".webp" };
 
     protected FileProvider(string filesDirectory, IWebHostEnvironment environment)
     {
