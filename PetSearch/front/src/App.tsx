@@ -6,14 +6,17 @@ import SignIn from "./Components/Auth/SignIn";
 import { SignUp } from "./Components/Auth/SignUp";
 import { RequireAuth } from "./Components/Auth/RequiredAuth";
 import ThemeProvider from "./Theme/ThemeProvider";
-import BaseLayout from "./Components/Templates/BaseLayout";
+import BaseLayout from "./Components/Layouts/BaseLayout";
 import { LostAnimalsPage } from "./Components/Pages/LostAnimalsPage";
 import { FoundAnimalsPage } from "./Components/Pages/FoundAnimalsPage";
 import { AnimalsShelterPage } from "./Components/Pages/AnimalsShelterPage";
 import { SnackbarProvider } from "notistack";
 import { Grow } from "@mui/material";
-import {LocalizationProvider,} from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider, } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import React from "react";
+import { LostAnimalInnerPage } from "./Components/LostAnimals/LostAnimalInnerPage";
+import { ErrorPage } from "./Components/Pages/ErrorPage";
 
 axios.defaults.baseURL = 'https://localhost:7257/api'
 
@@ -36,10 +39,12 @@ function App() {
       children: [
         { element: <Navigate to="/lost" />, index: true },
         { path: "lost", element: <LostAnimalsPage /> },
+        { path: "lost/:lostAnimalId", element: <LostAnimalInnerPage /> },
         { path: "found", element: <FoundAnimalsPage /> },
-        { path: "shelter", element: <AnimalsShelterPage /> }
+        { path: "shelter", element: <AnimalsShelterPage /> },
       ]
-    }])
+    },
+    { path: "*", element: <ErrorPage /> }])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -58,7 +63,5 @@ function App() {
     </QueryClientProvider>
   );
 }
-
-//TODO: сделать боковой навигатор зелёного цвета (при нажатии)
 
 export default App;

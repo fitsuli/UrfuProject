@@ -16,9 +16,10 @@ export const ModalStyle = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     padding: '32px',
-
     display: 'flex',
     flexDirection: 'column',
+    overflow: "scroll",
+    overflowX: "hidden",
     gap: '1em'
 };
 

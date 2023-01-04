@@ -10,7 +10,8 @@ import { useSaveLostAnimalMutation } from "../../QueryFetches/ApiHooks";
 import Dropzone from "react-dropzone";
 import { AttachmentsCard } from "../Common/AttachmentCard";
 import { CreateLostAnimalEntityDto } from "../../Models/CreateLostAnimalEntity";
-import { Carousel } from "../Carousel/Carousel";
+import { ImageFileCarousel } from "../Carousel/Carousel";
+import React from "react";
 
 export const AddLostAnimalButton: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false)
@@ -48,7 +49,21 @@ export const AddLostAnimalButton: React.FC = () => {
         lostAnimalEntity.lostDate = date.toISOString()
         lostAnimalEntity.files = selectedFiles
         await saveMutation.mutateAsync(lostAnimalEntity)
+        refreshModal()
+    }
+
+    const refreshModal = () => {
         setModalVisible(false)
+        setSelectedFiles([])
+        setDate(new Date())
+        setLostAnimalEntity({
+            animalName: "",
+            animalType: "",
+            lostArea: "",
+            lostDate: "",
+            description: "",
+            files: []
+        })
     }
 
     return <>
@@ -60,7 +75,7 @@ export const AddLostAnimalButton: React.FC = () => {
         <Modal
             disableAutoFocus
             open={modalVisible}
-            onClose={() => setModalVisible(false)}>
+            onClose={() => refreshModal()}>
             <Box sx={[ModalStyle, FullScreenStyle]}>
                 <Stack spacing={2}>
                     <Stack direction={"row"} justifyContent={"space-between"}>
@@ -68,7 +83,7 @@ export const AddLostAnimalButton: React.FC = () => {
                             Создание объявления
                         </Typography>
 
-                        <IconButton onClick={() => setModalVisible(false)}>
+                        <IconButton onClick={() => refreshModal()}>
                             <CloseRoundedIcon sx={{
                                 width: 36,
                                 height: 36
@@ -100,7 +115,7 @@ export const AddLostAnimalButton: React.FC = () => {
                                     value={date}
                                     inputFormat="dd.MM.yyyy HH:mm"
                                     onChange={(newValue) => {
-                                        setDate(newValue);
+                                        newValue && setDate(newValue);
                                     }}
                                 />
                                 <TextField
@@ -124,7 +139,7 @@ export const AddLostAnimalButton: React.FC = () => {
                             </Button>
                         </Stack>
                         <Stack direction={"column"} flexBasis={"50%"} spacing={3} pl={2}>
-                            <Carousel files={selectedFiles}/>
+                            {selectedFiles.length > 0 && <ImageFileCarousel files={selectedFiles}/>}
                             <Dropzone
                                 accept={{'image/png': [".png", ".jpg", ".jpeg", ".webp", ".bmp"]}}
                                 disabled={false}

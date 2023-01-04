@@ -1,3 +1,4 @@
+import React from "react"
 import { CircularProgress, Grid } from "@mui/material"
 import { LostAnimalEntity } from "../../Models/LostAnimalEntity"
 import { useLostAnimalsQuery } from "../../QueryFetches/ApiHooks"

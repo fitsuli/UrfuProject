@@ -8,6 +8,7 @@ import Logo from '../Logo';
 import { useAuth } from '../Auth/AuthProvider';
 import NavSection from './NavSections';
 import { NavConfig } from './NavConfig';
+import React from 'react';
 
 const NAV_WIDTH = 280;
 

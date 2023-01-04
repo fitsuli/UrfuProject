@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace PetSearch.Models.DTO;
 
-namespace PetSearch.Models.DTO;
-
-public class LostEnimalEntityDto
+public class LostEnimalEntityDto : BaseEntity
 {
     public string AnimalName { get; set; }
     public string AnimalType { get; set; }
@@ -11,7 +9,7 @@ public class LostEnimalEntityDto
     public DateTime LostDate { get; set; }
     public Guid UserId { get; set; }
     public IEnumerable<string> FileNames { get; set; }
-    
+
     public LostEnimalEntityDto(){}
 
     public LostEnimalEntityDto(LostAnimalEntity lostAnimalEntity)
@@ -22,6 +20,7 @@ public class LostEnimalEntityDto
         Description = lostAnimalEntity.Description;
         LostDate = lostAnimalEntity.LostDate;
         UserId = lostAnimalEntity.UserId;
+        Id = lostAnimalEntity.Id;
         FileNames = lostAnimalEntity.FileNames.Split(";").Where(x => !string.IsNullOrEmpty(x));
     }
 }

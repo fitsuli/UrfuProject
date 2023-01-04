@@ -9,7 +9,15 @@ export const useLostAnimalsQuery = () => {
         await delay(500);
         const result = await axios.get('lostAnimals');
         return result.data;
-    })
+    }, { retry: false })
+}
+
+export const useLostAnimalQuery = (lostAnimalId: string) => {
+    return useQuery<LostAnimalEntity, AxiosError>(['lostAnimals', {lostAnimalId}], async () => {
+        await delay(500);
+        const result = await axios.get(`lostAnimals/${lostAnimalId}`)
+        return result.data;
+    }, {retry: false})
 }
 
 export const useSaveLostAnimalMutation = (onSuccess: () => void) => {
@@ -32,10 +40,10 @@ export const useSaveLostAnimalMutation = (onSuccess: () => void) => {
     }, {
         onSuccess(data) {
             queryClient.setQueryData<LostAnimalEntity[]>("lostAnimals", lostAnimals => {
-                lostAnimals.push(data)
-                return [...lostAnimals]
+                lostAnimals && lostAnimals.push(data)
+                return lostAnimals ? [...lostAnimals] : []
             })
             if (onSuccess) onSuccess()
         }
-    })
+    }, )
 }

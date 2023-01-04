@@ -1,6 +1,8 @@
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 import { bgBlur } from '../../Styles/CssStyles';
+import React from 'react';
+import { AccountPopover } from './AccountPopover';
 
 const NAV_WIDTH = 280;
 
@@ -26,21 +28,10 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 
-export default function Header({ onOpenNav } : {onOpenNav : () => void}) {
+export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   return (
     <StyledRoot>
       <StyledToolbar>
-{/*         <IconButton
-          onClick={onOpenNav}
-          sx={{
-            mr: 1,
-            color: 'text.primary',
-            display: { lg: 'none' },
-          }}
-        >
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
- */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -51,8 +42,9 @@ export default function Header({ onOpenNav } : {onOpenNav : () => void}) {
             sm: 1,
           }}
         >
-            <Box color={'#FFFFFF'} />
+          <Box color={'#FFFFFF'} />
 
+          <AccountPopover/>
         </Stack>
       </StyledToolbar>
     </StyledRoot>
