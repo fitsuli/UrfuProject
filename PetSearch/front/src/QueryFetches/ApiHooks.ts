@@ -30,6 +30,8 @@ export const useSaveLostAnimalMutation = (onSuccess: () => void) => {
         formData.append("Description", lostAnimal.description)
         formData.append("LostDate", lostAnimal.lostDate)
         formData.append("LostArea", lostAnimal.lostArea)
+        formData.append("Gender", lostAnimal.gender.toString())
+        formData.append("Age", lostAnimal.age.toString())
         lostAnimal.files.forEach(file => formData.append("Images", file))
 
         const res = await axios.post('lostAnimals', formData, {

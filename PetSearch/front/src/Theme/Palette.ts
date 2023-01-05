@@ -1,3 +1,4 @@
+import { green } from '@mui/material/colors';
 import { alpha } from '@mui/material/styles';
 
 const GREY = {
@@ -14,11 +15,7 @@ const GREY = {
 };
 
 const PRIMARY = {
-  lighter: '#D1E9FC',
-  light: '#76B0F1',
-  main: '#2065D1',
-  dark: '#103996',
-  darker: '#061B64',
+  main: green[600].toString(),
   contrastText: '#fff',
 };
 

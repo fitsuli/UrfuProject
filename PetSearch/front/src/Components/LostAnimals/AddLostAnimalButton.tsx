@@ -1,4 +1,4 @@
-import { Fab, Modal, Typography, TextField, Box, Button, Stack, IconButton, Card } from "@mui/material"
+import { Fab, Modal, Typography, TextField, Box, Button, Stack, IconButton, Card, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from "@mui/material"
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
@@ -12,6 +12,7 @@ import { AttachmentsCard } from "../Common/AttachmentCard";
 import { CreateLostAnimalEntityDto } from "../../Models/CreateLostAnimalEntity";
 import { ImageFileCarousel } from "../Carousel/Carousel";
 import React from "react";
+import { Gender } from "../../Models/Gender";
 
 export const AddLostAnimalButton: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false)
@@ -25,6 +26,8 @@ export const AddLostAnimalButton: React.FC = () => {
         lostArea: "",
         lostDate: "",
         description: "",
+        age: 0,
+        gender: Gender.Male,
         files: []
     })
 
@@ -62,6 +65,8 @@ export const AddLostAnimalButton: React.FC = () => {
             lostArea: "",
             lostDate: "",
             description: "",
+            gender: Gender.Male,
+            age: 0,
             files: []
         })
     }
@@ -105,7 +110,7 @@ export const AddLostAnimalButton: React.FC = () => {
                             <TextField
                                 multiline
                                 rows={5}
-                                label={"Описание"}
+                                label={"Подробная информация"}
                                 onChange={handleChange("description")} />
 
                             <Stack direction={"row"} spacing={2}>
@@ -124,13 +129,40 @@ export const AddLostAnimalButton: React.FC = () => {
                                     sx={{
                                         flexGrow: 1
                                     }} />
+                            </Stack>
 
+                            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+                                <Card variant={"outlined"} elevation={0} sx={{ boxShadow: 0, borderRadius: 1}}>
+                                    <FormControl sx={{ padding: 2 }}>
+                                        <FormLabel id="radio-buttons-group-label">Пол животного</FormLabel>
+                                        <RadioGroup
+                                            row
+                                            aria-labelledby="radio-buttons-group-label"
+                                            value={lostAnimalEntity.gender}
+                                            name="radio-buttons-group"
+                                            onChange={handleChange("gender")}
+                                        >
+                                            <FormControlLabel control={<Radio />} label={"Мужской"} value={Gender.Male} />
+                                            <FormControlLabel control={<Radio />} label={"Женский"} value={Gender.Female} />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </Card>
+                                <TextField
+                                    id="outlined-number"
+                                    label="Возраст"
+                                    type="number"
+                                    InputLabelProps={{ shrink: true }}
+                                    InputProps={{ inputProps: { min: "0", max: "25", step: "1" } }}
+                                    onChange={handleChange("age")}
+                                    value={0}
+                                    sx={{ flexGrow: 1 }}
+                                />
                             </Stack>
 
                             <Button variant={"contained"}
-                                disabled={!lostAnimalEntity.animalName 
-                                    || !lostAnimalEntity.animalType 
-                                    || !lostAnimalEntity.description 
+                                disabled={!lostAnimalEntity.animalName
+                                    || !lostAnimalEntity.animalType
+                                    || !lostAnimalEntity.description
                                     || !lostAnimalEntity.lostArea
                                     || selectedFiles.length == 0}
                                 onClick={async () => await onSubmit()}
@@ -139,16 +171,16 @@ export const AddLostAnimalButton: React.FC = () => {
                             </Button>
                         </Stack>
                         <Stack direction={"column"} flexBasis={"50%"} spacing={3} pl={2}>
-                            {selectedFiles.length > 0 && <ImageFileCarousel files={selectedFiles}/>}
+                            {selectedFiles.length > 0 && <ImageFileCarousel files={selectedFiles} />}
                             <Dropzone
-                                accept={{'image/png': [".png", ".jpg", ".jpeg", ".webp", ".bmp"]}}
+                                accept={{ 'image/png': [".png", ".jpg", ".jpeg", ".webp", ".bmp"] }}
                                 disabled={false}
                                 onDrop={acceptedFiles => onFileDrop(acceptedFiles)}>
                                 {({ getRootProps, getInputProps }) => (
                                     <section>
                                         <div {...getRootProps()}>
-                                            <input {...getInputProps()}/>
-                                            <Card variant={"outlined"} sx={{...RoundedStyle}}>
+                                            <input {...getInputProps()} />
+                                            <Card variant={"outlined"} sx={{ ...RoundedStyle }}>
                                                 <Stack alignItems="center" justifyContent="center"
                                                     spacing={2}
                                                     sx={{
@@ -170,7 +202,7 @@ export const AddLostAnimalButton: React.FC = () => {
                                     </section>
                                 )}
                             </Dropzone>
-                            <AttachmentsCard selectedFiles={selectedFiles} onDelete={file => onDelete(file)} isDeletable={true}/>
+                            <AttachmentsCard selectedFiles={selectedFiles} onDelete={file => onDelete(file)} isDeletable={true} />
                         </Stack>
                     </Stack>
 

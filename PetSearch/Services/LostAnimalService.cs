@@ -40,13 +40,15 @@ public class LostAnimalService : ILostAnimalService
 
         var fileNames = uploadFilesResult.Result;
         
-        var lostAnimalEntity = new LostAnimalEntity()
+        var lostAnimalEntity = new LostAnimalEntity
         {
             AnimalName = createLostAnimalEntityDto.AnimalName,
             AnimalType = createLostAnimalEntityDto.AnimalType,
             LostArea = createLostAnimalEntityDto.LostArea,
             Description = createLostAnimalEntityDto.Description,
             LostDate = createLostAnimalEntityDto.LostDate,
+            Gender = createLostAnimalEntityDto.Gender,
+            Age = createLostAnimalEntityDto.Age,
             UserId = userId,
             FileNames = string.Join(";", fileNames)
         };

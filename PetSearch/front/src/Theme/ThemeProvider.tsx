@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 import { ThemeProvider as MUIThemeProvider, createTheme } from '@mui/material/styles';
-import green from '@mui/material/colors/green';
 import customShadows from './CustomShadows';
 import shadows from './Shadows';
 import Card from './Overrides/Card';
+import React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import palette from './Palette';
 
 export default function ThemeProvider({ children } : {children: JSX.Element}) {
     const themeOptions = useMemo(
         () => ({
-            palette: {primary: { main: green[600].toString() }}, 
+            palette, 
             customShadows: customShadows(),
             shadows: shadows(),
             shape: { borderRadius: 8 }
@@ -22,6 +24,7 @@ export default function ThemeProvider({ children } : {children: JSX.Element}) {
 
     return (
         <MUIThemeProvider theme={theme}>
+            <CssBaseline/>
             {children}
         </MUIThemeProvider>
     );
