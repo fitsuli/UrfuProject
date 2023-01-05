@@ -6,7 +6,9 @@ public class LostEnimalEntityDto : BaseEntity
 {
     public string AnimalName { get; set; }
     public string AnimalType { get; set; }
-    public string LostArea { get; set; }
+    public string LostAddressFull { get; set; }
+    public string LostAddressCity { get; set; }
+    public string LostGeoPosition { get; set; }
     public string Description { get; set; }
     public Gender Gender { get; set; }
     public int Age { get; set; }
@@ -21,7 +23,9 @@ public class LostEnimalEntityDto : BaseEntity
     {
         AnimalName = lostAnimalEntity.AnimalName;
         AnimalType = lostAnimalEntity.AnimalType;
-        LostArea = lostAnimalEntity.LostArea;
+        LostAddressFull = lostAnimalEntity.LostAddressFull;
+        LostAddressCity = lostAnimalEntity.LostAddressCity;
+        LostGeoPosition = lostAnimalEntity.LostGeoPosition;
         Description = lostAnimalEntity.Description;
         LostDate = lostAnimalEntity.LostDate;
         UserId = lostAnimalEntity.UserId;

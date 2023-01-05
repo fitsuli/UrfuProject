@@ -9,6 +9,7 @@ import { Gender } from "../../Models/Gender";
 import { format } from 'date-fns-tz'
 import { parseISO } from "date-fns";
 import plural from 'ru-plurals';
+import { YMaps, Map } from "@pbe/react-yandex-maps";
 
 export const LostAnimalInnerPage: React.FC = () => {
     const { lostAnimalId } = useParams()
@@ -71,15 +72,24 @@ export const LostAnimalInnerPage: React.FC = () => {
                 <Card>
                     <Stack direction={"column"} spacing={3} p={3}>
                         <Typography variant="h5">Место и время пропажи</Typography>
-                        <Typography variant="body1">Место пропажи: {lostAnimal?.lostArea}</Typography>
+                        <Typography variant="body1">Место пропажи: {lostAnimal?.lostAddressFull}</Typography>
                         <Typography variant="body1">Дата пропажи: {utcDate}</Typography>
 
                         <Divider sx={{ borderStyle: 'dashed' }} />
 
                         <Card>
-                            <Stack direction={"row"} p={3}>
-
-                            </Stack>
+                            <YMaps >
+                                <Map
+                                    defaultState={{
+                                        center: [55.75, 37.57],
+                                        zoom: 9,
+                                        controls: ['zoomControl'],
+                                    }}
+                                    modules={['control.ZoomControl']}
+                                    style={{
+                                        aspectRatio: '2/1'
+                                    }} />
+                            </YMaps>
                         </Card>
                     </Stack>
                 </Card>

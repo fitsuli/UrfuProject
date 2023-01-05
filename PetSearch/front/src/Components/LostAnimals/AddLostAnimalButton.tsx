@@ -13,6 +13,7 @@ import { CreateLostAnimalEntityDto } from "../../Models/CreateLostAnimalEntity";
 import { ImageFileCarousel } from "../Carousel/Carousel";
 import React from "react";
 import { Gender } from "../../Models/Gender";
+import { GeocodeSearch } from "../Map/GeocodeSearch";
 
 export const AddLostAnimalButton: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false)
@@ -23,7 +24,9 @@ export const AddLostAnimalButton: React.FC = () => {
     const [lostAnimalEntity, setLostAnimalEntity] = useState<CreateLostAnimalEntityDto>({
         animalName: "",
         animalType: "",
-        lostArea: "",
+        lostAddressFull: "",
+        lostAddressCity: "",
+        lostGeoPosition: "",
         lostDate: "",
         description: "",
         age: 0,
@@ -62,7 +65,9 @@ export const AddLostAnimalButton: React.FC = () => {
         setLostAnimalEntity({
             animalName: "",
             animalType: "",
-            lostArea: "",
+            lostAddressFull: "",
+            lostAddressCity: "",
+            lostGeoPosition: "",
             lostDate: "",
             description: "",
             gender: Gender.Male,
@@ -123,16 +128,10 @@ export const AddLostAnimalButton: React.FC = () => {
                                         newValue && setDate(newValue);
                                     }}
                                 />
-                                <TextField
-                                    label={"Где потеряли"}
-                                    onChange={handleChange("lostArea")}
-                                    sx={{
-                                        flexGrow: 1
-                                    }} />
                             </Stack>
 
                             <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                                <Card variant={"outlined"} elevation={0} sx={{ boxShadow: 0, borderRadius: 1}}>
+                                <Card variant={"outlined"} elevation={0} sx={{ boxShadow: 0, borderRadius: 1 }}>
                                     <FormControl sx={{ padding: 2 }}>
                                         <FormLabel id="radio-buttons-group-label">Пол животного</FormLabel>
                                         <RadioGroup
@@ -154,16 +153,26 @@ export const AddLostAnimalButton: React.FC = () => {
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{ inputProps: { min: "0", max: "25", step: "1" } }}
                                     onChange={handleChange("age")}
-                                    value={0}
+                                    value={lostAnimalEntity.age}
                                     sx={{ flexGrow: 1 }}
                                 />
                             </Stack>
+
+                            {/* TODO: разобраться почему не работает кнопка сабмита и что тут с handleChange */}
+                            <GeocodeSearch lostAnimalEntity={lostAnimalEntity}
+                                handleChange={(prop: string, value: string) => {
+                                    console.log(prop)
+                                    console.log(value)
+                                    setLostAnimalEntity({ ...lostAnimalEntity, [prop]: value })
+                                    console.log(lostAnimalEntity)
+                                }
+                                } />
 
                             <Button variant={"contained"}
                                 disabled={!lostAnimalEntity.animalName
                                     || !lostAnimalEntity.animalType
                                     || !lostAnimalEntity.description
-                                    || !lostAnimalEntity.lostArea
+                                    || !lostAnimalEntity.lostAddressFull
                                     || selectedFiles.length == 0}
                                 onClick={async () => await onSubmit()}
                                 type="submit">
