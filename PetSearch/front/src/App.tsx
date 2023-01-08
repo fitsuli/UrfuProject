@@ -17,6 +17,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React from "react";
 import { LostAnimalInnerPage } from "./Components/LostAnimals/LostAnimalInnerPage";
 import { ErrorPage } from "./Components/Pages/ErrorPage";
+import { CreateAnimalPostPage } from "./Components/Pages/CreateAnimalPostPage";
 
 axios.defaults.baseURL = 'https://localhost:7257/api'
 
@@ -42,6 +43,7 @@ function App() {
         { path: "lost/:lostAnimalId", element: <LostAnimalInnerPage /> },
         { path: "found", element: <FoundAnimalsPage /> },
         { path: "shelter", element: <AnimalsShelterPage /> },
+        { path: "addPost", element: <CreateAnimalPostPage /> }
       ]
     },
     { path: "*", element: <ErrorPage /> }])

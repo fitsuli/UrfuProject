@@ -9,7 +9,7 @@ import { Gender } from "../../Models/Gender";
 import { format } from 'date-fns-tz'
 import { parseISO } from "date-fns";
 import plural from 'ru-plurals';
-import { YMaps, Map } from "@pbe/react-yandex-maps";
+import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 
 export const LostAnimalInnerPage: React.FC = () => {
     const { lostAnimalId } = useParams()
@@ -19,6 +19,15 @@ export const LostAnimalInnerPage: React.FC = () => {
     const utcDate = useMemo(() => lostDate && format(lostDate, 'dd.MM.yyyy HH:mm'), [lostDate])
     const pluralizedAge = useMemo(() => plural('год', 'года', 'лет'), [])
 
+    const mapState = React.useMemo(
+        () => ({
+            center: lostAnimal?.lostGeoPosition ? lostAnimal.lostGeoPosition.split(" ").map(x => Number(x)).reverse() : [55.75, 37.57],
+            zoom: 13,
+            controls: ['zoomControl']
+        }),
+        [lostAnimal]
+    );
+    
     if (isLoading) {
         return <CircularProgress sx={CircularProgressStyle} />
     }
@@ -72,6 +81,7 @@ export const LostAnimalInnerPage: React.FC = () => {
                 <Card>
                     <Stack direction={"column"} spacing={3} p={3}>
                         <Typography variant="h5">Место и время пропажи</Typography>
+                        {lostAnimal?.lostAddressCity && <Typography variant="body1">Город: {lostAnimal?.lostAddressCity}</Typography>}
                         <Typography variant="body1">Место пропажи: {lostAnimal?.lostAddressFull}</Typography>
                         <Typography variant="body1">Дата пропажи: {utcDate}</Typography>
 
@@ -80,15 +90,13 @@ export const LostAnimalInnerPage: React.FC = () => {
                         <Card>
                             <YMaps >
                                 <Map
-                                    defaultState={{
-                                        center: [55.75, 37.57],
-                                        zoom: 9,
-                                        controls: ['zoomControl'],
-                                    }}
+                                    state={mapState}
                                     modules={['control.ZoomControl']}
                                     style={{
                                         aspectRatio: '2/1'
-                                    }} />
+                                    }}>
+                                    <Placemark defaultGeometry={mapState.center} />
+                                </Map>
                             </YMaps>
                         </Card>
                     </Stack>

@@ -1,14 +1,15 @@
 import React from "react"
-import { CircularProgress, Grid } from "@mui/material"
+import { CircularProgress, Fab, Grid } from "@mui/material"
 import { LostAnimalEntity } from "../../Models/LostAnimalEntity"
 import { useLostAnimalsQuery } from "../../QueryFetches/ApiHooks"
 import { CircularProgressStyle } from "../../Styles/SxStyles"
-import { AddLostAnimalButton } from "../LostAnimals/AddLostAnimalButton"
 import { LostAnimalCard } from "../LostAnimals/LostAnimalCard"
-
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { useNavigate } from "react-router-dom"
 
 export const LostAnimalsPage: React.FC = () => {
     const { data: lostAnimals, isLoading } = useLostAnimalsQuery()
+    const navigate = useNavigate();
 
     if (isLoading) {
         return <CircularProgress sx={CircularProgressStyle} />
@@ -22,6 +23,9 @@ export const LostAnimalsPage: React.FC = () => {
                 </Grid>)}
         </Grid>
 
-        <AddLostAnimalButton />
+        <Fab color="primary" variant="extended" sx={{ position: "fixed", bottom: 24, right: 24 }} onClick={() => navigate("/addPost")}>
+            <AddRoundedIcon sx={{ mr: 1 }} />
+            Создать объявление
+        </Fab>
     </>
 }
