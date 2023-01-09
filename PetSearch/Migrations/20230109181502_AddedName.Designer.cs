@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetSearch.Repositories;
@@ -11,9 +12,10 @@ using PetSearch.Repositories;
 namespace PetSearch.Migrations
 {
     [DbContext(typeof(WebApplicationDbContext))]
-    partial class WebApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230109181502_AddedName")]
+    partial class AddedName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,6 +139,9 @@ namespace PetSearch.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<string>("Vk")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("WhatsApp")
                                 .HasColumnType("text");
 
                             b1.HasKey("LostAnimalEntityId");

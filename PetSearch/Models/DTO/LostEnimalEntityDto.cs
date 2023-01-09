@@ -10,6 +10,7 @@ public class LostEnimalEntityDto : BaseEntity
     public string LostAddressCity { get; set; }
     public string LostGeoPosition { get; set; }
     public string Description { get; set; }
+    public Contacts Contacts { get; set; }
     public Gender Gender { get; set; }
     public int Age { get; set; }
     public DateTime LostDate { get; set; }
@@ -27,6 +28,7 @@ public class LostEnimalEntityDto : BaseEntity
         LostAddressCity = lostAnimalEntity.LostAddressCity;
         LostGeoPosition = lostAnimalEntity.LostGeoPosition;
         Description = lostAnimalEntity.Description;
+        Contacts = lostAnimalEntity.Contacts;
         LostDate = lostAnimalEntity.LostDate;
         UserId = lostAnimalEntity.UserId;
         Gender = lostAnimalEntity.Gender;

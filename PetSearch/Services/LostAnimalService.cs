@@ -48,6 +48,7 @@ public class LostAnimalService : ILostAnimalService
             LostAddressCity = createLostAnimalEntityDto.LostAddressCity,
             LostGeoPosition = createLostAnimalEntityDto.LostGeoPosition,
             Description = createLostAnimalEntityDto.Description,
+            Contacts = createLostAnimalEntityDto.Contacts,
             LostDate = createLostAnimalEntityDto.LostDate,
             Gender = createLostAnimalEntityDto.Gender,
             Age = createLostAnimalEntityDto.Age,

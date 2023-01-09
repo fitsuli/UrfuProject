@@ -1,3 +1,4 @@
+import { Contacts } from "./Contacts";
 import { Gender } from "./Gender";
 
 export type LostAnimalEntity = {
@@ -9,6 +10,7 @@ export type LostAnimalEntity = {
     lostDate: string;
     description: string;
     gender: Gender;
+    contacts: Contacts;
     age: number;
     fileNames: string[];
     userId?: string;

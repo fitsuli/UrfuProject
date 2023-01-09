@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query"
 import { LostAnimalEntity } from "../Models/LostAnimalEntity"
 import delay from "delay"
 import { CreateLostAnimalEntityDto } from "../Models/CreateLostAnimalEntity"
+import { serialize } from 'object-to-formdata';
 
 export const useLostAnimalsQuery = () => {
     return useQuery<LostAnimalEntity[], AxiosError>('lostAnimals', async () => {
@@ -24,16 +25,8 @@ export const useSaveLostAnimalMutation = (onSuccess: () => void) => {
     const queryClient = useQueryClient()
 
     return useMutation<LostAnimalEntity, AxiosError, CreateLostAnimalEntityDto>(async (lostAnimal) => {
-        let formData = new FormData();
-        formData.append("AnimalName", lostAnimal.animalName)
-        formData.append("AnimalType", lostAnimal.animalType)
-        formData.append("Description", lostAnimal.description)
-        formData.append("LostDate", lostAnimal.lostDate)
-        formData.append("LostAddressFull", lostAnimal.lostAddressFull)
-        formData.append("LostAddressCity", lostAnimal.lostAddressCity)
-        formData.append("LostGeoPosition", lostAnimal.lostGeoPosition)
-        formData.append("Gender", lostAnimal.gender.toString())
-        formData.append("Age", lostAnimal.age.toString())
+        let formData = serialize(lostAnimal);
+        formData.delete("Images");
         lostAnimal.files.forEach(file => formData.append("Images", file))
 
         const res = await axios.post('lostAnimals', formData, {
