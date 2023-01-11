@@ -50,6 +50,7 @@ public class LostAnimalService : ILostAnimalService
             Description = createLostAnimalEntityDto.Description,
             Contacts = createLostAnimalEntityDto.Contacts,
             LostDate = createLostAnimalEntityDto.LostDate,
+            PostCreationDate = createLostAnimalEntityDto.PostCreationDate,
             Gender = createLostAnimalEntityDto.Gender,
             Age = createLostAnimalEntityDto.Age,
             UserId = userId,

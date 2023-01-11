@@ -3,6 +3,5 @@ export type Contacts = {
     phone : string,
     email : string,
     telegram : string,
-    whatsApp : string,
     vk : string,
 }

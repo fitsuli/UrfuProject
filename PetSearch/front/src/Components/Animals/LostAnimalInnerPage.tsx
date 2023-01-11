@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { useParams } from "react-router-dom"
-import { Card, CircularProgress, Divider, Stack, Typography } from "@mui/material"
+import { Avatar, Button, Card, CircularProgress, Divider, Stack, Typography } from "@mui/material"
 import { CircularProgressStyle } from "../../Styles/SxStyles"
 import { useLostAnimalQuery } from "../../QueryFetches/ApiHooks"
 import { ErrorPage } from "../Pages/ErrorPage"
@@ -8,11 +8,19 @@ import { ImageUrlCarousel } from "../Carousel/Carousel"
 import { Gender } from "../../Models/Gender";
 import { format } from 'date-fns-tz'
 import { parseISO } from "date-fns";
+import { useAuth } from "../Auth/AuthProvider";
 import plural from 'ru-plurals';
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
+import stringAvatar from '../../Utils/AvatarString';
+import TagRoundedIcon from '@mui/icons-material/TagRounded';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import PhoneRoundedIcon from '@mui/icons-material/PhoneRounded';
+
 
 export const LostAnimalInnerPage: React.FC = () => {
     const { lostAnimalId } = useParams()
+    const auth = useAuth()
     const { data: lostAnimal, isLoading, isError } = useLostAnimalQuery(lostAnimalId!);
 
     const lostDate = useMemo(() => lostAnimal && parseISO(lostAnimal.lostDate), [lostAnimal])
@@ -27,7 +35,7 @@ export const LostAnimalInnerPage: React.FC = () => {
         }),
         [lostAnimal]
     );
-    
+
     if (isLoading) {
         return <CircularProgress sx={CircularProgressStyle} />
     }
@@ -41,13 +49,15 @@ export const LostAnimalInnerPage: React.FC = () => {
     }
 
     return <Stack spacing={3} paddingX={'36px'}>
-        <Typography variant="h4">{lostAnimal?.gender == Gender.Male ? "Потерялся" : "Потерялась"} {lostAnimal?.animalName}</Typography>
+        <Stack direction={"row"} justifyContent={"space-between"}>
+            <Typography variant="h4">{lostAnimal?.gender == Gender.Male ? "Потерялся" : "Потерялась"} {lostAnimal?.animalName}</Typography>
+            {auth.user.id == lostAnimal?.userId && <Button variant="outlined">Закрыть объявление</Button>}
+        </Stack>
 
         <Stack direction={"row"}>
             <Stack direction={"column"} flexBasis={"50%"} spacing={3} pr={2}>
                 {lostAnimal?.fileNames && <ImageUrlCarousel sourceUrls={lostAnimal?.fileNames} {...carouselStyleProps} />}
-            </Stack>
-            <Stack spacing={3} flexBasis={"50%"}>
+
                 <Card>
                     <Stack direction={"column"} spacing={3} pl={2} p={3}>
                         <Typography variant="h5">Подробная информация</Typography>
@@ -78,10 +88,46 @@ export const LostAnimalInnerPage: React.FC = () => {
                     </Stack>
                 </Card>
 
+            </Stack>
+            <Stack spacing={3} flexBasis={"50%"}>
+                <Card>
+                    <Stack direction={"column"} spacing={3} p={3}>
+                        <Typography variant="h5">Контакты</Typography>
+                        <Stack direction={"row"} spacing={2}>
+                            <Avatar {...stringAvatar(lostAnimal ? lostAnimal.contacts.name : "A A")} />
+                            <Typography variant="h6" alignSelf={"center"}>{lostAnimal?.contacts.name}</Typography>
+                        </Stack>
+
+                        <Stack direction={"column"} spacing={3} p={1}>
+
+                            <Stack direction={"row"} spacing={2}>
+                                <PhoneRoundedIcon />
+                                <Typography variant="body1">Телефон: {lostAnimal?.contacts.phone}</Typography>
+                            </Stack>
+
+                            {lostAnimal?.contacts.email &&
+                                <Stack direction={"row"} spacing={2}>
+                                    <EmailRoundedIcon />
+                                    <Typography variant="body1">Почта: {lostAnimal.contacts.email}</Typography>
+                                </Stack>}
+                            {lostAnimal?.contacts.telegram &&
+                                <Stack direction={"row"} spacing={2}>
+                                    <TelegramIcon />
+                                    <Typography variant="body1">Telegram: {lostAnimal.contacts.telegram}</Typography>
+                                </Stack>}
+                            {lostAnimal?.contacts.vk &&
+                                <Stack direction={"row"} spacing={2}>
+                                    <TagRoundedIcon />
+                                    <Typography variant="body1">Вконтакте: {lostAnimal.contacts.vk}</Typography>
+                                </Stack>}
+                        </Stack>
+                    </Stack>
+                </Card>
+
                 <Card>
                     <Stack direction={"column"} spacing={3} p={3}>
                         <Typography variant="h5">Место и время пропажи</Typography>
-                        {lostAnimal?.lostAddressCity && <Typography variant="body1">Город: {lostAnimal?.lostAddressCity}</Typography>}
+                        {lostAnimal?.lostAddressCity && <Typography variant="body1">Город: {lostAnimal.lostAddressCity}</Typography>}
                         <Typography variant="body1">Место пропажи: {lostAnimal?.lostAddressFull}</Typography>
                         <Typography variant="body1">Дата пропажи: {utcDate}</Typography>
 
@@ -101,8 +147,7 @@ export const LostAnimalInnerPage: React.FC = () => {
                         </Card>
                     </Stack>
                 </Card>
-
             </Stack>
-        </Stack>
-    </Stack>
+        </Stack >
+    </Stack >
 }

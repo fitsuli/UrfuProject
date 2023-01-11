@@ -1,4 +1,4 @@
-import { Typography, TextField, Box, Button, Stack, IconButton, Card, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, ToggleButtonGroup, ToggleButton, Divider, InputAdornment } from "@mui/material"
+import { Typography, TextField, Box, Button, Stack, Card, RadioGroup, FormControlLabel, Radio, FormControl, ToggleButtonGroup, ToggleButton, Divider, InputAdornment } from "@mui/material"
 import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
@@ -16,7 +16,7 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import { MuiTelInput } from 'mui-tel-input';
 import { styled } from '@mui/material/styles';
 import TagRoundedIcon from '@mui/icons-material/TagRounded';
-import SendRoundedIcon from '@mui/icons-material/SendRounded'
+import TelegramIcon from '@mui/icons-material/Telegram';
 import { useNavigate } from "react-router-dom";
 
 enum CurrentPage {
@@ -41,6 +41,7 @@ export const CreateAnimalPostPage: React.FC = () => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const [date, setDate] = useState<Date>(new Date())
     const [other, setOther] = useState<Boolean>(false)
+    const [validMail, setValidMail] = useState<Boolean>(false);
     const navigate = useNavigate()
     const [lostAnimalEntity, setLostAnimalEntity] = useState<CreateLostAnimalEntityDto>({
         animalName: "",
@@ -49,6 +50,7 @@ export const CreateAnimalPostPage: React.FC = () => {
         lostAddressCity: "",
         lostGeoPosition: "",
         lostDate: "",
+        postCreationDate : "",
         description: "",
         age: 0,
         gender: Gender.Male,
@@ -57,7 +59,6 @@ export const CreateAnimalPostPage: React.FC = () => {
             phone: "",
             email: "",
             telegram: "",
-            whatsApp: "",
             vk: ""
         },
         files: []
@@ -82,6 +83,7 @@ export const CreateAnimalPostPage: React.FC = () => {
     const saveMutation = useSaveLostAnimalMutation(() => enqueueSnackbar("Объявление создано!", { variant: "success" }))
     const onSubmit = async () => {
         lostAnimalEntity.lostDate = date.toISOString()
+        lostAnimalEntity.postCreationDate = new Date().toISOString()
         lostAnimalEntity.files = selectedFiles
         const mutationResult = await saveMutation.mutateAsync(lostAnimalEntity)
         console.log(mutationResult)
@@ -200,21 +202,21 @@ export const CreateAnimalPostPage: React.FC = () => {
                             <Box>
                                 <Stack spacing={3}>
                                     <Typography variant="h6">Контакты</Typography>
-                                    <TextField label={"Имя *"} onChange={(event) => {
+                                    <TextField label={"Имя"} onChange={(event) => {
                                         setLostAnimalEntity((prevState) => {
                                             prevState.contacts.name = event.target.value;
                                             return ({ ...prevState })
                                         })
-                                    }}
+                                    }} required
                                         value={lostAnimalEntity.contacts.name} autoFocus={true} />
 
                                     <MuiTelInputStyled inputProps={{ maxLength: 13 }}
-                                        forceCallingCode defaultCountry="RU" disableDropdown label={"Телефон *"} onChange={(newValue) => {
+                                        forceCallingCode defaultCountry="RU" disableDropdown label={"Телефон"} onChange={(newValue) => {
                                             setLostAnimalEntity((prevState) => {
                                                 prevState.contacts.phone = newValue;
                                                 return ({ ...prevState })
                                             })
-                                        }}
+                                        }} required
                                         value={lostAnimalEntity.contacts.phone} />
 
                                     <TextField
@@ -222,15 +224,22 @@ export const CreateAnimalPostPage: React.FC = () => {
                                         onChange={(event) => {
                                             setLostAnimalEntity((prevState) => {
                                                 prevState.contacts.email = event.target.value;
+                                                const regexp = new RegExp('[\w\d]*@[\w]*.[\w]*')
+                                                setValidMail(regexp.test(event.target.value));
                                                 return ({ ...prevState })
                                             })
                                         }}
+                                        error={!validMail && Boolean(lostAnimalEntity.contacts.email)}
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
                                                     <EmailRoundedIcon />
                                                 </InputAdornment>
                                             ),
+                                        }}
+                                        inputProps={{
+                                            inputMode: 'text',
+                                            pattern: "[\w\d]*@[\w]*.[\w]*"
                                         }}
                                         variant="outlined"
                                     />
@@ -246,7 +255,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
-                                                    <SendRoundedIcon />
+                                                    <TelegramIcon />
                                                 </InputAdornment>
                                             ),
                                         }}

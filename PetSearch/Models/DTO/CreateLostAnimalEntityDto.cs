@@ -13,6 +13,8 @@ public class CreateLostAnimalEntityDto
     public Contacts Contacts { get; set; }
     public Gender Gender { get; set; }
     public int Age { get; set; }
+    public bool? IsClosed { get; set; }
     public DateTime LostDate { get; set; }
+    public DateTime PostCreationDate { get; set; }
     public IFormFile[] Images { get; set; }
 }

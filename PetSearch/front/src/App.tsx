@@ -15,7 +15,7 @@ import { Grow } from "@mui/material";
 import { LocalizationProvider, } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React from "react";
-import { LostAnimalInnerPage } from "./Components/LostAnimals/LostAnimalInnerPage";
+import { LostAnimalInnerPage } from "./Components/Animals/LostAnimalInnerPage";
 import { ErrorPage } from "./Components/Pages/ErrorPage";
 import { CreateAnimalPostPage } from "./Components/Pages/CreateAnimalPostPage";
 

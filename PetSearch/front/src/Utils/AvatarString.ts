@@ -16,11 +16,17 @@ function stringToColor(string: string) {
   return color;
 }
 
+function getNameFirstLetters(name: string) {
+  return name.split(' ').length > 1
+    ? `${name.split(' ')[0][0].toUpperCase()}${name.split(' ')[1][0].toUpperCase()}`
+    : `${name.split(' ')[0][0].toUpperCase()}`
+}
+
 export default function stringAvatar(name: string) {
-  return {
+  return name ? {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(' ')[0][0].toUpperCase()}${name.split(' ')[1][0].toUpperCase()}`,
-  };
+    children: getNameFirstLetters(name),
+  } : {};
 }

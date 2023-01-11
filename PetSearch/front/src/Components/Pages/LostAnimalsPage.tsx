@@ -3,7 +3,7 @@ import { CircularProgress, Fab, Grid } from "@mui/material"
 import { LostAnimalEntity } from "../../Models/LostAnimalEntity"
 import { useLostAnimalsQuery } from "../../QueryFetches/ApiHooks"
 import { CircularProgressStyle } from "../../Styles/SxStyles"
-import { LostAnimalCard } from "../LostAnimals/LostAnimalCard"
+import { LostAnimalCard } from "../Animals/LostAnimalCard"
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { useNavigate } from "react-router-dom"
 

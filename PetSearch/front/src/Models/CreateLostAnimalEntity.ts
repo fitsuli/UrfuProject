@@ -8,6 +8,7 @@ export type CreateLostAnimalEntityDto = {
     lostAddressCity: string;
     lostGeoPosition: string;
     lostDate: string;
+    postCreationDate: string;
     description: string;
     gender: Gender;
     contacts: Contacts;

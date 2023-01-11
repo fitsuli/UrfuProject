@@ -13,7 +13,9 @@ public class LostAnimalEntity : BaseEntity
     public Contacts Contacts { get; set; }
     public Gender Gender { get; set; }
     public int Age { get; set; }
+    public bool IsClosed { get; set; }
     public DateTime LostDate { get; set; }
+    public DateTime PostCreationDate { get; set; }
     public Guid UserId { get; set; }
     public string FileNames { get; set; }
     

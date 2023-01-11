@@ -13,7 +13,9 @@ public class LostEnimalEntityDto : BaseEntity
     public Contacts Contacts { get; set; }
     public Gender Gender { get; set; }
     public int Age { get; set; }
+    public bool IsClosed { get; set; }
     public DateTime LostDate { get; set; }
+    public DateTime PostCreationDate { get; set; }
     public Guid UserId { get; set; }
     public IEnumerable<string> FileNames { get; set; }
     
@@ -30,6 +32,7 @@ public class LostEnimalEntityDto : BaseEntity
         Description = lostAnimalEntity.Description;
         Contacts = lostAnimalEntity.Contacts;
         LostDate = lostAnimalEntity.LostDate;
+        PostCreationDate = lostAnimalEntity.PostCreationDate;
         UserId = lostAnimalEntity.UserId;
         Gender = lostAnimalEntity.Gender;
         Age = lostAnimalEntity.Age;
