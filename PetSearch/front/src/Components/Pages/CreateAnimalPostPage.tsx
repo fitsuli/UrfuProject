@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useSnackbar } from "notistack";
 import { RoundedStyle } from "../../Styles/SxStyles";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { useSaveLostAnimalMutation } from "../../QueryFetches/ApiHooks";
+import { useSaveAnimalMutation } from "../../QueryFetches/ApiHooks";
 import Dropzone from "react-dropzone";
 import { AttachmentsCard } from "../Common/AttachmentCard";
-import { CreateLostAnimalDto } from "../../Models/CreateLostAnimalEntity";
+import { CreateAnimalDto } from "../../Models/CreateAnimalDto";
 import { ImageFileCarousel } from "../Carousel/Carousel";
 import React from "react";
 import { Gender } from "../../Models/Gender";
@@ -18,15 +18,11 @@ import { styled } from '@mui/material/styles';
 import TagRoundedIcon from '@mui/icons-material/TagRounded';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { useNavigate } from "react-router-dom";
+import { AnimalVariant } from "../../Models/AnimalVariant";
 
 enum CurrentPage {
     First,
     Second,
-}
-
-enum PostType {
-    Lost,
-    Found
 }
 
 const MuiTelInputStyled = styled(MuiTelInput)`
@@ -37,20 +33,21 @@ const MuiTelInputStyled = styled(MuiTelInput)`
 
 export const CreateAnimalPostPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<CurrentPage>(CurrentPage.First)
-    const [postType, setPostType] = useState<PostType>(PostType.Found)
+    const [postType, setPostType] = useState<AnimalVariant>(AnimalVariant.Lost)
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const [date, setDate] = useState<Date>(new Date())
     const [other, setOther] = useState<Boolean>(false)
     const [validMail, setValidMail] = useState<Boolean>(false);
     const navigate = useNavigate()
-    const [lostAnimalEntity, setLostAnimalEntity] = useState<CreateLostAnimalDto>({
+    const { enqueueSnackbar } = useSnackbar();
+    const [animal, setAnimal] = useState<CreateAnimalDto>({
         animalName: "",
         animalType: "Собака",
         addressFull: "",
         addressCity: "",
         geoPosition: "",
         date: "",
-        postCreationDate : "",
+        postCreationDate: "",
         description: "",
         age: 0,
         gender: Gender.Male,
@@ -65,7 +62,7 @@ export const CreateAnimalPostPage: React.FC = () => {
     })
 
     const handleChange = (prop: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setLostAnimalEntity({ ...lostAnimalEntity, [prop]: event.target.value });
+        setAnimal({ ...animal, [prop]: event.target.value });
     };
 
     const onFileDrop = (acceptedFiles: File[]) => {
@@ -78,17 +75,14 @@ export const CreateAnimalPostPage: React.FC = () => {
         setSelectedFiles(selectedFiles.filter((file) => selectedFile !== file))
     }
 
-    const { enqueueSnackbar } = useSnackbar();
 
-    const saveMutation = useSaveLostAnimalMutation(() => enqueueSnackbar("Объявление создано!", { variant: "success" }))
     const onSubmit = async () => {
-        lostAnimalEntity.date = date.toISOString()
-        lostAnimalEntity.postCreationDate = new Date().toISOString()
-        lostAnimalEntity.files = selectedFiles
-        const mutationResult = await saveMutation.mutateAsync(lostAnimalEntity)
-        console.log(mutationResult)
-        // TODO: адаптивно редиректить на потеряшку и на найденную
-        navigate(`/lost/${mutationResult.id}`)
+        const saveMutation = useSaveAnimalMutation(postType, () => enqueueSnackbar("Объявление создано!", { variant: "success" }))
+        animal.date = date.toISOString()
+        animal.postCreationDate = new Date().toISOString()
+        animal.files = selectedFiles
+        const mutationResult = await saveMutation.mutateAsync(animal)
+        postType == AnimalVariant.Lost ? navigate(`/lost/${mutationResult.id}`) : navigate(`/found/${mutationResult.id}`)
     }
 
     return <>
@@ -101,11 +95,11 @@ export const CreateAnimalPostPage: React.FC = () => {
                             <>
                                 <Typography variant="h6">Выберите тип объявления</Typography>
                                 <ToggleButtonGroup fullWidth sx={{ justifyContent: "center" }} color="primary" size="large" value={postType} exclusive={true} onChange={(event, value) => setPostType(value)}>
-                                    <ToggleButton value={PostType.Found} key={PostType.Found}>
-                                        Я нашел питомца
-                                    </ToggleButton>
-                                    <ToggleButton value={PostType.Lost} key={PostType.Lost}>
+                                    <ToggleButton value={AnimalVariant.Lost} key={AnimalVariant.Lost}>
                                         Я потерял питомца
+                                    </ToggleButton>
+                                    <ToggleButton value={AnimalVariant.Found} key={AnimalVariant.Found}>
+                                        Я нашел питомца
                                     </ToggleButton>
                                 </ToggleButtonGroup>
 
@@ -138,12 +132,15 @@ export const CreateAnimalPostPage: React.FC = () => {
                                             <RadioGroup
                                                 row
                                                 aria-labelledby="radio-buttons-group-label"
-                                                value={lostAnimalEntity.gender}
+                                                value={animal.gender}
                                                 name="radio-buttons-group"
                                                 onChange={handleChange("gender")}
                                             >
                                                 <FormControlLabel control={<Radio />} label={"Мужской"} value={Gender.Male} />
                                                 <FormControlLabel control={<Radio />} label={"Женский"} value={Gender.Female} />
+                                                {postType == AnimalVariant.Found &&
+                                                    <FormControlLabel control={<Radio />} label={"Не знаю"} value={Gender.Unknown} />
+                                                }
                                             </RadioGroup>
                                         </FormControl>
                                     </Card>
@@ -153,7 +150,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                                         type="number"
                                         InputProps={{ inputProps: { min: "0", max: "25", step: "1" } }}
                                         onChange={handleChange("age")}
-                                        value={lostAnimalEntity.age}
+                                        value={animal.age}
                                     />
                                 </Stack>
                             </>
@@ -161,14 +158,14 @@ export const CreateAnimalPostPage: React.FC = () => {
 
                         {currentPage == CurrentPage.Second && <><Stack spacing={3}>
                             <Typography variant="h6">Дополнительная информация о питомце</Typography>
-                            {postType == PostType.Lost && <TextField label={"Кличка питомца"} onChange={handleChange("animalName")} autoFocus={true} />}
+                            {postType == AnimalVariant.Lost && <TextField label={"Кличка питомца"} onChange={handleChange("animalName")} autoFocus={true} />}
                             <TextField
                                 multiline
                                 rows={5}
                                 label={"Дополнительная информация"}
                                 onChange={handleChange("description")} />
 
-                            <Typography variant="h6">Место и дата {postType == PostType.Found ? "пропажи" : "находки"}</Typography>
+                            <Typography variant="h6">Место и дата {postType == AnimalVariant.Found ? "пропажи" : "находки"}</Typography>
                             <Stack direction={"row"} spacing={2}>
                                 <DateTimePicker
                                     maxDateTime={new Date()}
@@ -183,9 +180,9 @@ export const CreateAnimalPostPage: React.FC = () => {
                             </Stack>
 
 
-                            <GeocodeSearch lostAnimalEntity={lostAnimalEntity}
+                            <GeocodeSearch lostAnimalEntity={animal}
                                 handleChange={(prop: string, value: string | undefined) => {
-                                    setLostAnimalEntity(previousState => ({ ...previousState, [prop]: value }))
+                                    setAnimal(previousState => ({ ...previousState, [prop]: value }))
                                 }
                                 } />
 
@@ -203,33 +200,33 @@ export const CreateAnimalPostPage: React.FC = () => {
                                 <Stack spacing={3}>
                                     <Typography variant="h6">Контакты</Typography>
                                     <TextField label={"Имя"} onChange={(event) => {
-                                        setLostAnimalEntity((prevState) => {
+                                        setAnimal((prevState) => {
                                             prevState.contacts.name = event.target.value;
                                             return ({ ...prevState })
                                         })
                                     }} required
-                                        value={lostAnimalEntity.contacts.name} autoFocus={true} />
+                                        value={animal.contacts.name} autoFocus={true} />
 
                                     <MuiTelInputStyled inputProps={{ maxLength: 13 }}
                                         forceCallingCode defaultCountry="RU" disableDropdown label={"Телефон"} onChange={(newValue) => {
-                                            setLostAnimalEntity((prevState) => {
+                                            setAnimal((prevState) => {
                                                 prevState.contacts.phone = newValue;
                                                 return ({ ...prevState })
                                             })
                                         }} required
-                                        value={lostAnimalEntity.contacts.phone} />
+                                        value={animal.contacts.phone} />
 
                                     <TextField
                                         label="Почта"
                                         onChange={(event) => {
-                                            setLostAnimalEntity((prevState) => {
+                                            setAnimal((prevState) => {
                                                 prevState.contacts.email = event.target.value;
                                                 const regexp = new RegExp('[\w\d]*@[\w]*.[\w]*')
                                                 setValidMail(regexp.test(event.target.value));
                                                 return ({ ...prevState })
                                             })
                                         }}
-                                        error={!validMail && Boolean(lostAnimalEntity.contacts.email)}
+                                        error={!validMail && Boolean(animal.contacts.email)}
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -247,7 +244,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                                     <TextField
                                         label="Telegram"
                                         onChange={(event) => {
-                                            setLostAnimalEntity((prevState) => {
+                                            setAnimal((prevState) => {
                                                 prevState.contacts.telegram = event.target.value;
                                                 return ({ ...prevState })
                                             })
@@ -265,7 +262,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                                     <TextField
                                         label="VK"
                                         onChange={(event) => {
-                                            setLostAnimalEntity((prevState) => {
+                                            setAnimal((prevState) => {
                                                 prevState.contacts.vk = event.target.value;
                                                 return ({ ...prevState })
                                             })
@@ -326,9 +323,9 @@ export const CreateAnimalPostPage: React.FC = () => {
                                     alignSelf: "flex-end",
                                     justifySelf: "flex-end",
                                 }}
-                                disabled={!lostAnimalEntity.animalType
-                                    || !lostAnimalEntity.description
-                                    || !lostAnimalEntity.addressFull
+                                disabled={!animal.animalType
+                                    || !animal.description
+                                    || !animal.addressFull
                                     || selectedFiles.length == 0}
                                 onClick={async () => await onSubmit()}
                                 type="submit">
@@ -340,7 +337,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                 </Stack>
 
                 {currentPage == CurrentPage.First && <Button variant={"contained"}
-                    disabled={!lostAnimalEntity.contacts.name || !lostAnimalEntity.contacts.phone}
+                    disabled={!animal.contacts.name || !animal.contacts.phone}
                     sx={{
                         alignSelf: "center",
                         width: "40%"

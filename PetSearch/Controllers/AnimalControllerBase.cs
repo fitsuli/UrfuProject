@@ -24,10 +24,10 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{lostAnimalId}")]
-    public async Task<ActionResult> GetLostAnimalById([FromRoute] Guid lostAnimalId)
+    [HttpGet("{animalId}")]
+    public async Task<ActionResult> GetLostAnimalById([FromRoute] Guid animalId)
     {
-        var lostAnimal = await animalService.GetAnimal(lostAnimalId);
+        var lostAnimal = await animalService.GetAnimal(animalId);
         if (lostAnimal == null)
             return NotFound();
         
@@ -50,14 +50,14 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         return Ok(createResult.Result);
     }
 
-    [HttpPost("close")]
-    public async Task<ActionResult> CloseLostAnimalPost([FromQuery] Guid lostAnimalId)
+    [HttpPost("close/{animalId}")]
+    public async Task<ActionResult> CloseLostAnimalPost([FromRoute] Guid animalId)
     {
         var userId = HttpContext.GetUserId();
         if (userId == null)
             return BadRequest();
         
-        var lostAnimalEntity = await animalService.GetAnimal(lostAnimalId);
+        var lostAnimalEntity = await animalService.GetAnimal(animalId);
         if (lostAnimalEntity == null)
             return NotFound("Lost animal not found");
 
@@ -68,21 +68,21 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         return Ok();
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteLostAnimalPost([FromQuery] Guid lostAnimalId)
+    [HttpDelete("{animalId}")]
+    public async Task<ActionResult> DeleteLostAnimalPost([FromRoute] Guid animalId)
     {
         var userId = HttpContext.GetUserId();
         if (userId == null)
             return BadRequest();
         
-        var lostAnimalEntity = await animalService.GetAnimal(lostAnimalId);
+        var lostAnimalEntity = await animalService.GetAnimal(animalId);
         if (lostAnimalEntity == null)
             return NotFound("Lost animal not found");
 
         if (lostAnimalEntity.UserId != userId)
             return Forbid("You cannot delete this lost animal post because you didn't create it");
 
-        var result = await animalService.DeleteAnimal(lostAnimalId);
+        var result = await animalService.DeleteAnimal(animalId);
         if (!result.IsSuccessful)
             return StatusCode(result.HttpStatusCode.Value);
         

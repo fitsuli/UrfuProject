@@ -1,14 +1,15 @@
 import React from "react"
 import { CircularProgress, Fab, Grid } from "@mui/material"
-import { LostAnimalEntity } from "../../Models/LostAnimalEntity"
-import { useLostAnimalsQuery } from "../../QueryFetches/ApiHooks"
+import { Animal } from "../../Models/Animal"
+import { useAnimalsQuery } from "../../QueryFetches/ApiHooks"
 import { CircularProgressStyle } from "../../Styles/SxStyles"
 import { LostAnimalCard } from "../Animals/LostAnimalCard"
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { useNavigate } from "react-router-dom"
+import { AnimalVariant } from "../../Models/AnimalVariant"
 
 export const LostAnimalsPage: React.FC = () => {
-    const { data: lostAnimals, isLoading } = useLostAnimalsQuery()
+    const { data: lostAnimals, isLoading } = useAnimalsQuery(AnimalVariant.Lost)
     const navigate = useNavigate();
 
     if (isLoading) {
@@ -17,7 +18,7 @@ export const LostAnimalsPage: React.FC = () => {
 
     return <>
         <Grid container spacing={3} paddingX={'36px'}>
-            {lostAnimals!.map((animal: LostAnimalEntity) =>
+            {lostAnimals!.map((animal: Animal) =>
                 <Grid key={animal.id} item xs={12} sm={6} md={3}>
                     <LostAnimalCard key={animal.id} animal={animal} />
                 </Grid>)}

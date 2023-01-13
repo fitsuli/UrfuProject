@@ -83,6 +83,7 @@ public abstract class AnimalServiceBase<TAnimal> : IAnimalService<TAnimal>
             return OperationResult.Failure("Entity not found", (int)HttpStatusCode.NotFound);
         
         await repository.RemoveAsync(animal);
+        await repository.SaveChangesAsync();
         return OperationResult.Success();
     }
 }

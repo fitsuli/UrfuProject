@@ -1,12 +1,12 @@
 import React, { useMemo } from "react"
 import { Box, Card, CardHeader, Stack } from '@mui/material';
-import { LostAnimalEntity } from "../../Models/LostAnimalEntity";
+import { Animal } from "../../Models/Animal";
 import { format } from 'date-fns-tz'
 import { parseISO } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const LostAnimalCard: React.FC<{
-    animal: LostAnimalEntity
+    animal: Animal
 }> = ({ animal }) => {
     const navigate = useNavigate()
     const location = useLocation()

@@ -1,19 +1,18 @@
 import { Contacts } from "./Contacts";
 import { Gender } from "./Gender";
 
-export type CreateLostAnimalDto = {
-    animalName: string;
+export type Animal = {
+    animalName: string | null;
     animalType: string;
     addressFull: string;
     addressCity: string;
     geoPosition: string;
     date: string;
-    postCreationDate: string;
     description: string;
     gender: Gender;
     contacts: Contacts;
     age: number;
-    files: File[];
+    fileNames: string[];
     userId?: string;
     id?: string;
 }

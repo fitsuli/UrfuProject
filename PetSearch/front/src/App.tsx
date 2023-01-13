@@ -42,6 +42,7 @@ function App() {
         { path: "lost", element: <LostAnimalsPage /> },
         { path: "lost/:lostAnimalId", element: <LostAnimalInnerPage /> },
         { path: "found", element: <FoundAnimalsPage /> },
+        { path: "lost/:lostAnimalId", element: <LostAnimalInnerPage /> },
         { path: "shelter", element: <AnimalsShelterPage /> },
         { path: "addPost", element: <CreateAnimalPostPage /> }
       ]
