@@ -1,13 +1,13 @@
 import { Contacts } from "./Contacts";
 import { Gender } from "./Gender";
 
-export type CreateLostAnimalEntityDto = {
+export type CreateLostAnimalDto = {
     animalName: string;
     animalType: string;
-    lostAddressFull: string;
-    lostAddressCity: string;
-    lostGeoPosition: string;
-    lostDate: string;
+    addressFull: string;
+    addressCity: string;
+    geoPosition: string;
+    date: string;
     postCreationDate: string;
     description: string;
     gender: Gender;

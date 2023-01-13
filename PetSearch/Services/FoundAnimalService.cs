@@ -4,9 +4,9 @@ using PetSearch.Services.Providers.Abstractions;
 
 namespace PetSearch.Services;
 
-public class LostAnimalService : AnimalServiceBase<LostAnimal>
+public class FoundAnimalService : AnimalServiceBase<FoundAnimal>
 {
-    public LostAnimalService(IRepository<LostAnimal> repository, IFileProvider<LostAnimal> fileProvider) 
+    public FoundAnimalService(IRepository<FoundAnimal> repository, IFileProvider<FoundAnimal> fileProvider) 
         : base(repository, fileProvider)
     {
     }

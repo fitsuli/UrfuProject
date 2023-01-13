@@ -1,6 +1,6 @@
 import settings from "../settings.json";
 import {SignUpModel} from "../Models/SignUpModel";
-import { CreateLostAnimalEntityDto } from "../Models/CreateLostAnimalEntity";
+import { CreateLostAnimalDto } from "../Models/CreateLostAnimalEntity";
 import axios from "axios";
 
 export const signInRequest = (login: string, password: string) => {

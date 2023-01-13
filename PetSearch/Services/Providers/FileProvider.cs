@@ -1,15 +1,17 @@
 ﻿using PetSearch.Common;
+using PetSearch.Models;
 using PetSearch.Services.Providers.Abstractions;
 
 namespace PetSearch.Services.Providers;
 
-public class FileProvider : IFileProvider
+public class FileProvider<TAnimal> : IFileProvider<TAnimal>
+    where TAnimal : Animal
 {
     private readonly string filesDirectory;
     private readonly string baseDirectoryPath;
     private readonly string[] permittedExtensions = { ".png", ".jpg", ".bmp", ".jpeg", ".webp" };
 
-    protected FileProvider(string filesDirectory, IWebHostEnvironment environment)
+    public FileProvider(string filesDirectory, IWebHostEnvironment environment)
     {
         this.filesDirectory = filesDirectory;
         baseDirectoryPath = environment.ContentRootPath;;

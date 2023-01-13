@@ -7,7 +7,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import { useSaveLostAnimalMutation } from "../../QueryFetches/ApiHooks";
 import Dropzone from "react-dropzone";
 import { AttachmentsCard } from "../Common/AttachmentCard";
-import { CreateLostAnimalEntityDto } from "../../Models/CreateLostAnimalEntity";
+import { CreateLostAnimalDto } from "../../Models/CreateLostAnimalEntity";
 import { ImageFileCarousel } from "../Carousel/Carousel";
 import React from "react";
 import { Gender } from "../../Models/Gender";
@@ -43,13 +43,13 @@ export const CreateAnimalPostPage: React.FC = () => {
     const [other, setOther] = useState<Boolean>(false)
     const [validMail, setValidMail] = useState<Boolean>(false);
     const navigate = useNavigate()
-    const [lostAnimalEntity, setLostAnimalEntity] = useState<CreateLostAnimalEntityDto>({
+    const [lostAnimalEntity, setLostAnimalEntity] = useState<CreateLostAnimalDto>({
         animalName: "",
         animalType: "Собака",
-        lostAddressFull: "",
-        lostAddressCity: "",
-        lostGeoPosition: "",
-        lostDate: "",
+        addressFull: "",
+        addressCity: "",
+        geoPosition: "",
+        date: "",
         postCreationDate : "",
         description: "",
         age: 0,
@@ -82,7 +82,7 @@ export const CreateAnimalPostPage: React.FC = () => {
 
     const saveMutation = useSaveLostAnimalMutation(() => enqueueSnackbar("Объявление создано!", { variant: "success" }))
     const onSubmit = async () => {
-        lostAnimalEntity.lostDate = date.toISOString()
+        lostAnimalEntity.date = date.toISOString()
         lostAnimalEntity.postCreationDate = new Date().toISOString()
         lostAnimalEntity.files = selectedFiles
         const mutationResult = await saveMutation.mutateAsync(lostAnimalEntity)
@@ -328,7 +328,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                                 }}
                                 disabled={!lostAnimalEntity.animalType
                                     || !lostAnimalEntity.description
-                                    || !lostAnimalEntity.lostAddressFull
+                                    || !lostAnimalEntity.addressFull
                                     || selectedFiles.length == 0}
                                 onClick={async () => await onSubmit()}
                                 type="submit">

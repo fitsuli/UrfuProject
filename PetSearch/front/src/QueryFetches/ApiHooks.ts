@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { LostAnimalEntity } from "../Models/LostAnimalEntity"
 import delay from "delay"
-import { CreateLostAnimalEntityDto } from "../Models/CreateLostAnimalEntity"
+import { CreateLostAnimalDto } from "../Models/CreateLostAnimalEntity"
 import { serialize } from 'object-to-formdata';
 
 export const useLostAnimalsQuery = () => {
@@ -24,7 +24,7 @@ export const useLostAnimalQuery = (lostAnimalId: string) => {
 export const useSaveLostAnimalMutation = (onSuccess: () => void) => {
     const queryClient = useQueryClient()
 
-    return useMutation<LostAnimalEntity, AxiosError, CreateLostAnimalEntityDto>(async (lostAnimal) => {
+    return useMutation<LostAnimalEntity, AxiosError, CreateLostAnimalDto>(async (lostAnimal) => {
         let formData = serialize(lostAnimal);
         formData.delete("Images");
         lostAnimal.files.forEach(file => formData.append("Images", file))

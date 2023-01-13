@@ -12,8 +12,8 @@ using PetSearch.Repositories;
 namespace PetSearch.Migrations
 {
     [DbContext(typeof(WebApplicationDbContext))]
-    [Migration("20221126113509_Added lost date")]
-    partial class Addedlostdate
+    [Migration("20230113174406_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,14 +24,16 @@ namespace PetSearch.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetSearch.Models.LostAnimalEntity", b =>
+            modelBuilder.Entity("PetSearch.Models.Animal", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Age")
+                        .HasColumnType("integer");
+
                     b.Property<string>("AnimalName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("AnimalType")
@@ -42,11 +44,36 @@ namespace PetSearch.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LostArea")
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileNames")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LostAddressCity")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LostAddressFull")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("LostDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LostGeoPosition")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PostCreationDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
@@ -54,7 +81,9 @@ namespace PetSearch.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LostAnimals");
+                    b.ToTable("Animal");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Animal");
                 });
 
             modelBuilder.Entity("PetSearch.Models.User", b =>
@@ -98,6 +127,55 @@ namespace PetSearch.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UsersAuth");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.FoundAnimal", b =>
+                {
+                    b.HasBaseType("PetSearch.Models.Animal");
+
+                    b.HasDiscriminator().HasValue("FoundAnimal");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.LostAnimal", b =>
+                {
+                    b.HasBaseType("PetSearch.Models.Animal");
+
+                    b.HasDiscriminator().HasValue("LostAnimal");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.Animal", b =>
+                {
+                    b.OwnsOne("PetSearch.Models.Contacts", "Contacts", b1 =>
+                        {
+                            b1.Property<Guid>("AnimalId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Phone")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Telegram")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Vk")
+                                .HasColumnType("text");
+
+                            b1.HasKey("AnimalId");
+
+                            b1.ToTable("Animal");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AnimalId");
+                        });
+
+                    b.Navigation("Contacts")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

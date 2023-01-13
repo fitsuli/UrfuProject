@@ -12,8 +12,8 @@ using PetSearch.Repositories;
 namespace PetSearch.Migrations
 {
     [DbContext(typeof(WebApplicationDbContext))]
-    [Migration("20230109181502_AddedName")]
-    partial class AddedName
+    [Migration("20230113175026_Updated field names")]
+    partial class Updatedfieldnames
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace PetSearch.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetSearch.Models.LostAnimalEntity", b =>
+            modelBuilder.Entity("PetSearch.Models.Animal", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,6 @@ namespace PetSearch.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("AnimalName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("AnimalType")
@@ -45,12 +44,19 @@ namespace PetSearch.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FileNames")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LostAddressCity")
                         .IsRequired()
@@ -67,12 +73,17 @@ namespace PetSearch.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("PostCreationDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LostAnimals");
+                    b.ToTable("Animal");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Animal");
                 });
 
             modelBuilder.Entity("PetSearch.Models.User", b =>
@@ -118,11 +129,25 @@ namespace PetSearch.Migrations
                     b.ToTable("UsersAuth");
                 });
 
-            modelBuilder.Entity("PetSearch.Models.LostAnimalEntity", b =>
+            modelBuilder.Entity("PetSearch.Models.FoundAnimal", b =>
+                {
+                    b.HasBaseType("PetSearch.Models.Animal");
+
+                    b.HasDiscriminator().HasValue("FoundAnimal");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.LostAnimal", b =>
+                {
+                    b.HasBaseType("PetSearch.Models.Animal");
+
+                    b.HasDiscriminator().HasValue("LostAnimal");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.Animal", b =>
                 {
                     b.OwnsOne("PetSearch.Models.Contacts", "Contacts", b1 =>
                         {
-                            b1.Property<Guid>("LostAnimalEntityId")
+                            b1.Property<Guid>("AnimalId")
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Email")
@@ -141,15 +166,12 @@ namespace PetSearch.Migrations
                             b1.Property<string>("Vk")
                                 .HasColumnType("text");
 
-                            b1.Property<string>("WhatsApp")
-                                .HasColumnType("text");
+                            b1.HasKey("AnimalId");
 
-                            b1.HasKey("LostAnimalEntityId");
-
-                            b1.ToTable("LostAnimals");
+                            b1.ToTable("Animal");
 
                             b1.WithOwner()
-                                .HasForeignKey("LostAnimalEntityId");
+                                .HasForeignKey("AnimalId");
                         });
 
                     b.Navigation("Contacts")

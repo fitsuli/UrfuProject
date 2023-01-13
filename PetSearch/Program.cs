@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using PetSearch.Models;
 using PetSearch.Repositories;
 using PetSearch.Repositories.Abstractions;
 using PetSearch.Services;
@@ -112,13 +113,19 @@ public static class Program
 
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ILostAnimalRepository, LostAnimalRepository>();
+        services.AddScoped<IRepository<LostAnimal>, LostAnimalRepository>();
+        services.AddScoped<IRepository<FoundAnimal>, FoundAnimalRepository>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ILostAnimalService, LostAnimalService>();
+        services.AddScoped<IAnimalService<LostAnimal>, LostAnimalService>();
+        services.AddScoped<IAnimalService<FoundAnimal>, FoundAnimalService>();
 
-        services.AddScoped<ILostAnimalsFileProvider>(ctx => new LostAnimalsFileProvider(
+        services.AddScoped<IFileProvider<LostAnimal>>(ctx => new FileProvider<LostAnimal>(
             configuration["LostAnimalsFileDirectory"],
+            ctx.GetService<IWebHostEnvironment>()));
+        
+        services.AddScoped<IFileProvider<FoundAnimal>>(ctx => new FileProvider<FoundAnimal>(
+            configuration["FoundAnimalsFileDirectory"],
             ctx.GetService<IWebHostEnvironment>()));
     }
 

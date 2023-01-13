@@ -23,13 +23,13 @@ export const LostAnimalInnerPage: React.FC = () => {
     const auth = useAuth()
     const { data: lostAnimal, isLoading, isError } = useLostAnimalQuery(lostAnimalId!);
 
-    const lostDate = useMemo(() => lostAnimal && parseISO(lostAnimal.lostDate), [lostAnimal])
+    const lostDate = useMemo(() => lostAnimal && parseISO(lostAnimal.date), [lostAnimal])
     const utcDate = useMemo(() => lostDate && format(lostDate, 'dd.MM.yyyy HH:mm'), [lostDate])
     const pluralizedAge = useMemo(() => plural('год', 'года', 'лет'), [])
 
     const mapState = React.useMemo(
         () => ({
-            center: lostAnimal?.lostGeoPosition ? lostAnimal.lostGeoPosition.split(" ").map(x => Number(x)).reverse() : [55.75, 37.57],
+            center: lostAnimal?.geoPosition ? lostAnimal.geoPosition.split(" ").map(x => Number(x)).reverse() : [55.75, 37.57],
             zoom: 13,
             controls: ['zoomControl']
         }),
@@ -127,8 +127,8 @@ export const LostAnimalInnerPage: React.FC = () => {
                 <Card>
                     <Stack direction={"column"} spacing={3} p={3}>
                         <Typography variant="h5">Место и время пропажи</Typography>
-                        {lostAnimal?.lostAddressCity && <Typography variant="body1">Город: {lostAnimal.lostAddressCity}</Typography>}
-                        <Typography variant="body1">Место пропажи: {lostAnimal?.lostAddressFull}</Typography>
+                        {lostAnimal?.addressCity && <Typography variant="body1">Город: {lostAnimal.addressCity}</Typography>}
+                        <Typography variant="body1">Место пропажи: {lostAnimal?.addressFull}</Typography>
                         <Typography variant="body1">Дата пропажи: {utcDate}</Typography>
 
                         <Divider sx={{ borderStyle: 'dashed' }} />

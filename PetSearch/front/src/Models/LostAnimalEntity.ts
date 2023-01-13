@@ -4,10 +4,10 @@ import { Gender } from "./Gender";
 export type LostAnimalEntity = {
     animalName: string;
     animalType: string;
-    lostAddressFull: string;
-    lostAddressCity: string;
-    lostGeoPosition: string;
-    lostDate: string;
+    addressFull: string;
+    addressCity: string;
+    geoPosition: string;
+    date: string;
     description: string;
     gender: Gender;
     contacts: Contacts;

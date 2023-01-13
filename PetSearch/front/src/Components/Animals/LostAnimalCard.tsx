@@ -10,7 +10,7 @@ export const LostAnimalCard: React.FC<{
 }> = ({ animal }) => {
     const navigate = useNavigate()
     const location = useLocation()
-    const lostDate = useMemo(() => parseISO(animal.lostDate), [animal])
+    const lostDate = useMemo(() => parseISO(animal.date), [animal])
     const utcDate = useMemo(() => format(lostDate, 'dd.MM.yyyy'), [lostDate])
 
     return <>

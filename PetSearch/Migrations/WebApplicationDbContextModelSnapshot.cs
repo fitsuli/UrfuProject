@@ -22,7 +22,7 @@ namespace PetSearch.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetSearch.Models.LostAnimalEntity", b =>
+            modelBuilder.Entity("PetSearch.Models.Animal", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,7 +32,6 @@ namespace PetSearch.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("AnimalName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("AnimalType")
@@ -40,6 +39,10 @@ namespace PetSearch.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -76,7 +79,9 @@ namespace PetSearch.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LostAnimals");
+                    b.ToTable("Animal");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Animal");
                 });
 
             modelBuilder.Entity("PetSearch.Models.User", b =>
@@ -122,11 +127,25 @@ namespace PetSearch.Migrations
                     b.ToTable("UsersAuth");
                 });
 
-            modelBuilder.Entity("PetSearch.Models.LostAnimalEntity", b =>
+            modelBuilder.Entity("PetSearch.Models.FoundAnimal", b =>
+                {
+                    b.HasBaseType("PetSearch.Models.Animal");
+
+                    b.HasDiscriminator().HasValue("FoundAnimal");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.LostAnimal", b =>
+                {
+                    b.HasBaseType("PetSearch.Models.Animal");
+
+                    b.HasDiscriminator().HasValue("LostAnimal");
+                });
+
+            modelBuilder.Entity("PetSearch.Models.Animal", b =>
                 {
                     b.OwnsOne("PetSearch.Models.Contacts", "Contacts", b1 =>
                         {
-                            b1.Property<Guid>("LostAnimalEntityId")
+                            b1.Property<Guid>("AnimalId")
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Email")
@@ -145,12 +164,12 @@ namespace PetSearch.Migrations
                             b1.Property<string>("Vk")
                                 .HasColumnType("text");
 
-                            b1.HasKey("LostAnimalEntityId");
+                            b1.HasKey("AnimalId");
 
-                            b1.ToTable("LostAnimals");
+                            b1.ToTable("Animal");
 
                             b1.WithOwner()
-                                .HasForeignKey("LostAnimalEntityId");
+                                .HasForeignKey("AnimalId");
                         });
 
                     b.Navigation("Contacts")
