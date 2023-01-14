@@ -12,9 +12,9 @@ public abstract class AnimalServiceBase<TAnimal> : IAnimalService<TAnimal>
     where TAnimal : Animal, new()
 {
     private readonly IRepository<TAnimal> repository;
-    private readonly IFileProvider<TAnimal> fileProvider;
+    private readonly IFileProvider fileProvider;
 
-    protected AnimalServiceBase(IRepository<TAnimal> repository, IFileProvider<TAnimal> fileProvider)
+    protected AnimalServiceBase(IRepository<TAnimal> repository, IFileProvider fileProvider)
     {
         this.repository = repository;
         this.fileProvider = fileProvider;

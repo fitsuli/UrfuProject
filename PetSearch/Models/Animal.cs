@@ -7,7 +7,7 @@ public class Animal : BaseEntity
     public string? AnimalName { get; set; }
     public string AnimalType { get; set; }
     public string LostAddressFull { get; set; }
-    public string LostAddressCity { get; set; }
+    public string? LostAddressCity { get; set; }
     public string LostGeoPosition { get; set; }
     public string Description { get; set; }
     public Contacts Contacts { get; set; }

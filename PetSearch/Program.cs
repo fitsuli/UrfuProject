@@ -9,7 +9,7 @@ using PetSearch.Repositories.Abstractions;
 using PetSearch.Services;
 using PetSearch.Services.Abstractions;
 using PetSearch.Services.Providers;
-using PetSearch.Services.Providers.Abstractions;
+using IFileProvider = PetSearch.Services.Providers.Abstractions.IFileProvider;
 
 namespace PetSearch;
 
@@ -46,8 +46,8 @@ public static class Program
             FileProvider = new PhysicalFileProvider(
                 Path.Combine(builder.Environment.ContentRootPath,
                     "StaticFiles", 
-                    builder.Configuration.GetSection("StaticFilesDirectories")["LostAnimalsFileDirectory"])),
-            RequestPath = "/LostAnimalsImages"
+                    builder.Configuration["AnimalsImagesDirectory"])),
+            RequestPath = "/AnimalsImages"
         });
 
         if (app.Environment.IsProduction())
@@ -120,12 +120,8 @@ public static class Program
         services.AddScoped<IAnimalService<LostAnimal>, LostAnimalService>();
         services.AddScoped<IAnimalService<FoundAnimal>, FoundAnimalService>();
 
-        services.AddScoped<IFileProvider<LostAnimal>>(ctx => new FileProvider<LostAnimal>(
-            configuration["LostAnimalsFileDirectory"],
-            ctx.GetService<IWebHostEnvironment>()));
-        
-        services.AddScoped<IFileProvider<FoundAnimal>>(ctx => new FileProvider<FoundAnimal>(
-            configuration["FoundAnimalsFileDirectory"],
+        services.AddScoped<IFileProvider>(ctx => new FileProvider(
+            configuration["AnimalsImagesDirectory"],
             ctx.GetService<IWebHostEnvironment>()));
     }
 

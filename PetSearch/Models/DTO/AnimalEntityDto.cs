@@ -7,7 +7,7 @@ public class AnimalEntityDto : BaseEntity
     public string? AnimalName { get; set; }
     public string AnimalType { get; set; }
     public string AddressFull { get; set; }
-    public string AddressCity { get; set; }
+    public string? AddressCity { get; set; }
     public string GeoPosition { get; set; }
     public string Description { get; set; }
     public Contacts Contacts { get; set; }

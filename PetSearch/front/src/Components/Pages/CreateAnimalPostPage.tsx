@@ -76,8 +76,8 @@ export const CreateAnimalPostPage: React.FC = () => {
     }
 
 
+    const saveMutation = useSaveAnimalMutation(postType, () => enqueueSnackbar("Объявление создано!", { variant: "success" }))
     const onSubmit = async () => {
-        const saveMutation = useSaveAnimalMutation(postType, () => enqueueSnackbar("Объявление создано!", { variant: "success" }))
         animal.date = date.toISOString()
         animal.postCreationDate = new Date().toISOString()
         animal.files = selectedFiles

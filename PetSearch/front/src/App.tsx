@@ -15,7 +15,7 @@ import { Grow } from "@mui/material";
 import { LocalizationProvider, } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React from "react";
-import { LostAnimalInnerPage } from "./Components/Animals/LostAnimalInnerPage";
+import { AnimalInnerPage } from "./Components/Animals/AnimalInnerPage";
 import { ErrorPage } from "./Components/Pages/ErrorPage";
 import { CreateAnimalPostPage } from "./Components/Pages/CreateAnimalPostPage";
 
@@ -40,9 +40,9 @@ function App() {
       children: [
         { element: <Navigate to="/lost" />, index: true },
         { path: "lost", element: <LostAnimalsPage /> },
-        { path: "lost/:lostAnimalId", element: <LostAnimalInnerPage /> },
+        { path: "lost/:lostAnimalId", element: <AnimalInnerPage /> },
         { path: "found", element: <FoundAnimalsPage /> },
-        { path: "lost/:lostAnimalId", element: <LostAnimalInnerPage /> },
+        { path: "found/:lostAnimalId", element: <AnimalInnerPage /> },
         { path: "shelter", element: <AnimalsShelterPage /> },
         { path: "addPost", element: <CreateAnimalPostPage /> }
       ]

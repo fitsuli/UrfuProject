@@ -13,6 +13,7 @@ export type Animal = {
     contacts: Contacts;
     age: number;
     fileNames: string[];
+    isClosed: boolean;
     userId?: string;
-    id?: string;
+    id: string;
 }

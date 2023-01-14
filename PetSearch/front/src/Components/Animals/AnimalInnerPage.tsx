@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useSnackbar } from "notistack";
-import { Avatar, Box, Button, Card, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, Modal, Radio, RadioGroup, Stack, Typography } from "@mui/material"
+import { Avatar, Box, Button, Card, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, Modal, Radio, RadioGroup, Stack, Typography } from "@mui/material"
 import { CircularProgressStyle, ModalStyle } from "../../Styles/SxStyles"
-import { useAnimalQuery, useDeleteAnimalMutation } from "../../QueryFetches/ApiHooks"
+import { useAnimalQuery, useClosePostMutation, useDeleteAnimalMutation } from "../../QueryFetches/ApiHooks"
 import { ErrorPage } from "../Pages/ErrorPage"
 import { ImageUrlCarousel } from "../Carousel/Carousel"
 import { Gender } from "../../Models/Gender";
@@ -17,19 +17,24 @@ import TagRoundedIcon from '@mui/icons-material/TagRounded';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import PhoneRoundedIcon from '@mui/icons-material/PhoneRounded';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import { AnimalVariant } from "../../Models/AnimalVariant"
 
-
-export const LostAnimalInnerPage: React.FC = () => {
+export const AnimalInnerPage: React.FC = () => {
     const { lostAnimalId: animalId } = useParams()
     const auth = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
+    const animalVariant = useMemo(() => getAnimalVariant(location.pathname), [location])
     const { enqueueSnackbar } = useSnackbar();
-    const { data: animal, isLoading, isError } = useAnimalQuery(AnimalVariant.Lost, animalId!);
-    const deleteMutation = useDeleteAnimalMutation(AnimalVariant.Lost, () => enqueueSnackbar("Объявление закрыто", { variant: "success" }))
+    const { data: animal, isLoading, isError } = useAnimalQuery(animalVariant, animalId!);
+
+    const deleteMutation = useDeleteAnimalMutation(animalVariant, () => enqueueSnackbar("Объявление закрыто", { variant: "success" }))
+    const closePostMutation = useClosePostMutation(animalVariant, () => enqueueSnackbar("Объявление закрыто", { variant: "success" }))
+    const foundCloseReason = animalVariant == AnimalVariant.Lost ? "Я нашёл питомца" : "Я нашёл хозяина"
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [closeReason, setCloseReason] = useState("Я нашёл питомца");
+    const [closeReason, setCloseReason] = useState(foundCloseReason);
 
     const lostDate = useMemo(() => animal && parseISO(animal.date), [animal])
     const utcDate = useMemo(() => lostDate && format(lostDate, 'dd.MM.yyyy HH:mm'), [lostDate])
@@ -45,15 +50,13 @@ export const LostAnimalInnerPage: React.FC = () => {
     );
 
     const handlePostClose = async () => {
-        //TODO: сделать этот компонент универсальным и прокидывать сюда AnimalVariant
-        if (closeReason == "Я нашёл питомца") {
-            //TODO: другая мутация на change state
-            return;
-        } 
+        if (closeReason == foundCloseReason) {
+            await closePostMutation.mutateAsync(animal!)
+        } else {
+            await deleteMutation.mutateAsync(animal!);
+        }
 
-        const mutationResult = await deleteMutation.mutateAsync(animal!);
-        //TODO: поменять в зависимости от AnimalVariant
-        navigate("/lost")
+        animalVariant == AnimalVariant.Lost ? navigate("/lost") : navigate("/found")
     }
 
     if (isLoading) {
@@ -70,12 +73,21 @@ export const LostAnimalInnerPage: React.FC = () => {
 
     return <Stack spacing={3} paddingX={'36px'}>
         <Stack direction={"row"} justifyContent={"space-between"}>
-            {animal?.gender == Gender.Female ?
+            {animalVariant == AnimalVariant.Lost && (animal?.gender == Gender.Female ?
                 <Typography variant="h4">Потерялась {animal?.animalName}</Typography>
                 : <Typography variant="h4">Потерялся {animal?.animalName}</Typography>
+            )}
+            {
+                animalVariant == AnimalVariant.Found &&
+                <Typography variant="h4">Нашлась {animal?.animalType.toLowerCase()}</Typography>
             }
-            {auth.user.id == animal?.userId && <Button variant="outlined"
+
+            {auth.user.id == animal?.userId && !animal?.isClosed && <Button variant="outlined"
                 onClick={() => setModalVisible(true)}>Закрыть объявление</Button>}
+
+            {animal?.isClosed && <Chip sx={{
+            }} color={"primary"} label={animalVariant == AnimalVariant.Lost ? "Питомец найден" : "Хозяин найден"} icon={<CheckCircleOutlineRoundedIcon />} />
+            }
         </Stack>
 
         <Stack direction={"row"}>
@@ -184,7 +196,7 @@ export const LostAnimalInnerPage: React.FC = () => {
                         name="radio-buttons-group"
                         onChange={(event) => setCloseReason(event.target.value)}
                     >
-                        <FormControlLabel control={<Radio />} label={"Я нашёл питомца"} value={"Я нашёл питомца"} />
+                        <FormControlLabel control={<Radio />} label={foundCloseReason} value={foundCloseReason} />
                         <FormControlLabel control={<Radio />} label={"Я просто хочу закрыть объявление"} value={"Я просто хочу закрыть объявление"} />
                     </RadioGroup>
                 </FormControl>
@@ -198,4 +210,10 @@ export const LostAnimalInnerPage: React.FC = () => {
         </Dialog>
     </Stack >
 
+}
+
+const getAnimalVariant = (pathname: string) => {
+    if (pathname.includes("lost"))
+        return AnimalVariant.Lost
+    return AnimalVariant.Found
 }

@@ -18,7 +18,7 @@ export const ImageUrlCarousel: React.FC<{
     const baseUrl = "https://localhost:7257"
     return <>
         <Carousel navButtonsAlwaysVisible={true} animation={"fade"} duration={400}>
-            {sourceUrls?.map((fileSourceUrl, i) => <ImageSourceItem {...props} fileSourceUrl={baseUrl + `/LostAnimalsImages/${fileSourceUrl}`} key={i} />)}
+            {sourceUrls?.map((fileSourceUrl, i) => <ImageSourceItem {...props} fileSourceUrl={baseUrl + `/AnimalsImages/${fileSourceUrl}`} key={i} />)}
         </Carousel>
     </>
 }

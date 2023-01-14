@@ -65,7 +65,7 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
             return Forbid("You cannot close this lost animal post because you didn't create it");
 
         await animalService.CloseAnimalPost(lostAnimalEntity);
-        return Ok();
+        return Ok(lostAnimalEntity);
     }
 
     [HttpDelete("{animalId}")]
@@ -86,6 +86,6 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         if (!result.IsSuccessful)
             return StatusCode(result.HttpStatusCode.Value);
         
-        return Ok();
+        return Ok(lostAnimalEntity);
     }
 }

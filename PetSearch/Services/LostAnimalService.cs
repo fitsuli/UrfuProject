@@ -6,7 +6,7 @@ namespace PetSearch.Services;
 
 public class LostAnimalService : AnimalServiceBase<LostAnimal>
 {
-    public LostAnimalService(IRepository<LostAnimal> repository, IFileProvider<LostAnimal> fileProvider) 
+    public LostAnimalService(IRepository<LostAnimal> repository, IFileProvider fileProvider) 
         : base(repository, fileProvider)
     {
     }

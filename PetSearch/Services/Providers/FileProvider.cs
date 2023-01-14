@@ -4,8 +4,7 @@ using PetSearch.Services.Providers.Abstractions;
 
 namespace PetSearch.Services.Providers;
 
-public class FileProvider<TAnimal> : IFileProvider<TAnimal>
-    where TAnimal : Animal
+public class FileProvider : IFileProvider
 {
     private readonly string filesDirectory;
     private readonly string baseDirectoryPath;

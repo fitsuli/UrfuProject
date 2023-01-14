@@ -74,4 +74,28 @@ export const useDeleteAnimalMutation = (variant : AnimalVariant, onSuccess: () =
     }, )
 }
 
+export const useClosePostMutation = (variant : AnimalVariant, onSuccess: () => void) => {
+    const queryClient = useQueryClient()
+    const queryName = GetQueryName(variant);
+    
+    return useMutation<Animal, AxiosError, Animal>(async (animal) => {
+        const res = await axios.post(`${queryName}/close/${animal.id}`)
+
+        return res.data
+    }, {
+        onSuccess(data) {
+            queryClient.setQueryData<Animal[]>(queryName, animals => {
+                if (animals){
+                    const index = animals.findIndex(obj => obj.id == data.id);
+                    const animal = animals[index];
+                    animal.isClosed = true;
+                    return animals ? [...animals] : []
+                }
+                return animals ? [...animals] : []
+            })
+            if (onSuccess) onSuccess()
+        }
+    }, )
+}
+
 const GetQueryName = (variant: AnimalVariant) => variant == AnimalVariant.Lost ? "lostAnimals" : "foundAnimals"
