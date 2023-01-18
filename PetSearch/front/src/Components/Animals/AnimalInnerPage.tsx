@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useSnackbar } from "notistack";
-import { Avatar, Box, Button, Card, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, Modal, Radio, RadioGroup, Stack, Typography } from "@mui/material"
-import { CircularProgressStyle, ModalStyle } from "../../Styles/SxStyles"
+import { Avatar, Button, Card, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, Modal, Radio, RadioGroup, Stack, Typography } from "@mui/material"
+import { CircularProgressStyle } from "../../Styles/SxStyles"
 import { useAnimalQuery, useClosePostMutation, useDeleteAnimalMutation } from "../../QueryFetches/ApiHooks"
 import { ErrorPage } from "../Pages/ErrorPage"
 import { ImageUrlCarousel } from "../Carousel/Carousel"
@@ -170,7 +170,7 @@ export const AnimalInnerPage: React.FC = () => {
                         <Divider sx={{ borderStyle: 'dashed' }} />
 
                         <Card>
-                            <YMaps >
+                            <YMaps>
                                 <Map
                                     state={mapState}
                                     modules={['control.ZoomControl']}

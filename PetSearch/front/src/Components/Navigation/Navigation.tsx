@@ -22,6 +22,7 @@ const StyledAccount = styled('div')(({ theme }) => ({
 
 export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onCloseNav: () => void }) {
   const { pathname } = useLocation();
+  //@ts-ignore
   const isDesktop = useResponsive('up', 'lg');
   const auth = useAuth()
   const theme = useTheme()

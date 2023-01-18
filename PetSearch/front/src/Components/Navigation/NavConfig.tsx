@@ -1,6 +1,7 @@
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import NearMeRoundedIcon from '@mui/icons-material/NearMeRounded';
-import NightShelterRoundedIcon from '@mui/icons-material/NightShelterRounded';
+import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
+import React from 'react';
 
 export type NavConfigItem = {
     title: string,
@@ -20,8 +21,8 @@ export const NavConfig : Array<NavConfigItem> = [
         icon: <NearMeRoundedIcon />
     },
     {
-        title: 'Приюты',
-        path: '/shelter',
-        icon: <NightShelterRoundedIcon />
+        title: 'Карта',
+        path: '/map',
+        icon: <PlaceRoundedIcon />
     }
 ]

@@ -9,7 +9,7 @@ import ThemeProvider from "./Theme/ThemeProvider";
 import BaseLayout from "./Components/Layouts/BaseLayout";
 import { LostAnimalsPage } from "./Components/Pages/LostAnimalsPage";
 import { FoundAnimalsPage } from "./Components/Pages/FoundAnimalsPage";
-import { AnimalsShelterPage } from "./Components/Pages/AnimalsShelterPage";
+import { AnimalsMap } from "./Components/Pages/AnimalsMap";
 import { SnackbarProvider } from "notistack";
 import { Grow } from "@mui/material";
 import { LocalizationProvider, } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
@@ -29,8 +29,6 @@ const queryClient = new QueryClient({
   }
 })
 
-
-
 function App() {
   const routes = useRoutes([
     { path: "signIn", element: <SignIn /> },
@@ -43,7 +41,7 @@ function App() {
         { path: "lost/:lostAnimalId", element: <AnimalInnerPage /> },
         { path: "found", element: <FoundAnimalsPage /> },
         { path: "found/:lostAnimalId", element: <AnimalInnerPage /> },
-        { path: "shelter", element: <AnimalsShelterPage /> },
+        { path: "map", element: <AnimalsMap /> },
         { path: "addPost", element: <CreateAnimalPostPage /> }
       ]
     },
