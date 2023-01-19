@@ -36,7 +36,6 @@ export const CreateAnimalPostPage: React.FC = () => {
     const [postType, setPostType] = useState<AnimalVariant>(AnimalVariant.Lost)
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const [date, setDate] = useState<Date>(new Date())
-    const [other, setOther] = useState<Boolean>(false)
     const [validMail, setValidMail] = useState<Boolean>(false);
     const navigate = useNavigate()
     const { enqueueSnackbar } = useSnackbar();
@@ -94,7 +93,11 @@ export const CreateAnimalPostPage: React.FC = () => {
                         {currentPage == CurrentPage.First &&
                             <>
                                 <Typography variant="h6">Выберите тип объявления</Typography>
-                                <ToggleButtonGroup fullWidth sx={{ justifyContent: "center" }} color="primary" size="large" value={postType} exclusive={true} onChange={(event, value) => setPostType(value)}>
+                                <ToggleButtonGroup fullWidth sx={{ justifyContent: "center" }} color="primary" size="large" value={postType} exclusive={true} onChange={(event, value) => {
+                                    if (value !== null) {
+                                        setPostType(value)
+                                    }
+                                }}>
                                     <ToggleButton value={AnimalVariant.Lost} key={AnimalVariant.Lost}>
                                         Я потерял питомца
                                     </ToggleButton>
@@ -114,13 +117,13 @@ export const CreateAnimalPostPage: React.FC = () => {
                                                 defaultValue={"Собака"}
                                                 onChange={handleChange("animalType")}
                                             >
-                                                <FormControlLabel control={<Radio />} label={"Собака"} value={"Собака"} onChange={() => setOther(false)} />
-                                                <FormControlLabel control={<Radio />} label={"Кошка"} value={"Кошка"} onChange={() => setOther(false)} />
-                                                <FormControlLabel control={<Radio />} label={"Другой"} value={"Другой"} onChange={() => setOther(true)} />
+                                                <FormControlLabel control={<Radio />} label={"Собака"} value={"Собака"} />
+                                                <FormControlLabel control={<Radio />} label={"Кошка"} value={"Кошка"} />
+                                                <FormControlLabel control={<Radio />} label={"Другой"} value={"Другой"} />
                                             </RadioGroup>
                                         </FormControl>
                                     </Card>
-                                    {other && <TextField label={"Тип питомца"}
+                                    {animal.animalType != "Собака" && animal.animalType != "Кошка" && <TextField label={"Тип питомца"}
                                         onChange={handleChange("animalType")}
                                         sx={{ flexGrow: 1 }} />}
                                 </Stack>
@@ -165,7 +168,7 @@ export const CreateAnimalPostPage: React.FC = () => {
                                 label={"Дополнительная информация"}
                                 onChange={handleChange("description")} />
 
-                            <Typography variant="h6">Место и дата {postType == AnimalVariant.Found ? "пропажи" : "находки"}</Typography>
+                            <Typography variant="h6">Место и дата {postType == AnimalVariant.Found ? "находки" : "пропажи"}</Typography>
                             <Stack direction={"row"} spacing={2}>
                                 <DateTimePicker
                                     maxDateTime={new Date()}

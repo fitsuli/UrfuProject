@@ -74,8 +74,8 @@ export const AnimalInnerPage: React.FC = () => {
     return <Stack spacing={3} paddingX={'36px'}>
         <Stack direction={"row"} justifyContent={"space-between"}>
             {animalVariant == AnimalVariant.Lost && (animal?.gender == Gender.Female ?
-                <Typography variant="h4">Потерялась {animal?.animalName}</Typography>
-                : <Typography variant="h4">Потерялся {animal?.animalName}</Typography>
+                <Typography variant="h4">Пропала {animal?.animalName}</Typography>
+                : <Typography variant="h4">Пропал {animal?.animalName}</Typography>
             )}
             {
                 animalVariant == AnimalVariant.Found &&

@@ -1,8 +1,10 @@
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, Fab } from '@mui/material';
 import { bgBlur } from '../../Styles/CssStyles';
 import React from 'react';
 import { AccountPopover } from './AccountPopover';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { useNavigate } from 'react-router-dom';
 
 const NAV_WIDTH = 280;
 
@@ -29,22 +31,27 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 
 export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
+  const navigate = useNavigate()
+
   return (
     <StyledRoot>
       <StyledToolbar>
         <Box sx={{ flexGrow: 1 }} />
-
         <Stack
           direction="row"
           alignItems="center"
           spacing={{
-            xs: 0.5,
-            sm: 1,
+            xs: 1,
+            sm: 3,
           }}
         >
           <Box color={'#FFFFFF'} />
 
-          <AccountPopover/>
+          <Fab color="primary" variant="extended" onClick={() => navigate("/addPost")}>
+            <AddRoundedIcon sx={{ mr: 1 }} />
+            Создать объявление
+          </Fab>
+          <AccountPopover />
         </Stack>
       </StyledToolbar>
     </StyledRoot>

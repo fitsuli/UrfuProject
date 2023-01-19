@@ -5,7 +5,6 @@ import Header from './Header';
 import Nav from '../Navigation/Navigation';
 import React from 'react';
 
-
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 

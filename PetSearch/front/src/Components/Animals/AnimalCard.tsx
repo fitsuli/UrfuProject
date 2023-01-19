@@ -20,6 +20,10 @@ export const AnimalCard: React.FC<{
     return <>
         <Card onClick={() => navigate(`${location.pathname}/${animal.id}`)} sx={{
             position: "relative",
+            "&:hover": {
+                cursor: "pointer",
+                backgroundColor: theme.palette.grey[100]
+            }
         }}>
             <Box sx={{
                 height: "300px",

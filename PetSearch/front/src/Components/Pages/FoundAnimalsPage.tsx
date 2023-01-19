@@ -1,5 +1,5 @@
 import React from "react"
-import { CircularProgress, Fab, Grid } from "@mui/material"
+import { CircularProgress, Fab, Grid, Stack, Typography } from "@mui/material"
 import { Animal } from "../../Models/Animal"
 import { useAnimalsQuery } from "../../QueryFetches/ApiHooks"
 import { CircularProgressStyle } from "../../Styles/SxStyles"
@@ -17,16 +17,12 @@ export const FoundAnimalsPage: React.FC = () => {
     }
 
     return <>
-        <Grid container spacing={3} paddingX={'36px'}>
+        <Typography variant={"h4"} pl={"42px"} pb={"36px"}>Найденные питомцы</Typography>
+        <Grid container spacing={3} paddingX={'42px'}>
             {foundAnimals!.map((animal: Animal) =>
                 <Grid key={animal.id} item xs={12} sm={6} md={3}>
                     <AnimalCard variant={AnimalVariant.Found} key={animal.id} animal={animal} />
                 </Grid>)}
         </Grid>
-
-        <Fab color="primary" variant="extended" sx={{ position: "fixed", bottom: 24, right: 24 }} onClick={() => navigate("/addPost")}>
-            <AddRoundedIcon sx={{ mr: 1 }} />
-            Создать объявление
-        </Fab>
     </>
 }

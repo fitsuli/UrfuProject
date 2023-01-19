@@ -3,6 +3,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { StyledNavItem, StyledNavItemIcon } from './StyledNavItem';
 import { alpha, useTheme } from '@mui/material';
 import { NavConfigItem } from './NavConfig';
+import React from 'react';
 
 export const NavItem = ({ item } : {item : NavConfigItem}) => {
     const { title, path, icon } = item;

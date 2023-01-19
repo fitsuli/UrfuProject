@@ -1,23 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
-import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 import { useAuth } from '../Auth/AuthProvider';
 import stringAvatar from '../../Utils/AvatarString';
-
-const MENU_OPTIONS = [
-    {
-        label: 'Домашняя',
-        icon: 'eva:home-fill',
-    },
-    {
-        label: 'Профиль',
-        icon: 'eva:person-fill',
-    }
-];
+import { useNavigate } from 'react-router-dom';
 
 export const AccountPopover: React.FC = () => {
     const [open, setOpen] = useState(null);
+    const navigate = useNavigate();
     const auth = useAuth();
 
     const handleOpen = (event) => {
@@ -80,11 +70,12 @@ export const AccountPopover: React.FC = () => {
             <Divider sx={{ borderStyle: 'dashed' }} />
 
             <Stack sx={{ p: 1 }}>
-                {MENU_OPTIONS.map((option) => (
-                    <MenuItem key={option.label} onClick={handleClose}>
-                        {option.label}
-                    </MenuItem>
-                ))}
+                <MenuItem key={'Домашняя'} onClick={() => navigate("/lost")}>
+                    {'Домашняя'}
+                </MenuItem>
+                <MenuItem key={'Профиль'} onClick={handleClose}>
+                    {'Профиль'}
+                </MenuItem>
             </Stack>
 
             <Divider sx={{ borderStyle: 'dashed' }} />
