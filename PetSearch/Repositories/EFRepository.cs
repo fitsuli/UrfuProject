@@ -4,7 +4,7 @@ using PetSearch.Models;
 
 namespace PetSearch.Repositories
 {
-    public class EFRepository<TEntity>: IRepository<TEntity> where TEntity : BaseEntity
+    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         public bool ReadOnly { get; }
 
@@ -23,12 +23,41 @@ namespace PetSearch.Repositories
             return Items.FirstOrDefaultAsync(e => EF.Property<Guid>(e, keyProperty.Name) == id, cancellationToken);
         }
 
-        public Task<TEntity[]> ListAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken)
+        public Task<TEntity[]> ListAsync(Expression<Func<TEntity, bool>> expression,
+            CancellationToken cancellationToken)
         {
             return Items.Where(expression).ToArrayAsync(cancellationToken);
         }
 
-        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken)
+        public Task<TSelectKey[]> ListAsync<TSelectKey>(Expression<Func<TEntity, bool>> expression,
+            Expression<Func<TEntity, TSelectKey>> keySelector,
+            CancellationToken cancellationToken)
+        {
+            return Items.Where(expression).Select(keySelector).ToArrayAsync(cancellationToken);
+        }
+
+        public Task<TEntity[]> ListWithOrderAsync<TKey>(Expression<Func<TEntity, bool>> expression,
+            Expression<Func<TEntity, TKey>> keySelector,
+            bool sortDesc,
+            int take,
+            int skip,
+            CancellationToken cancellationToken)
+        {
+            return sortDesc
+                ? Items.Where(expression)
+                    .OrderByDescending(keySelector)
+                    .Take(take)
+                    .Skip(skip)
+                    .ToArrayAsync(cancellationToken)
+                : Items.Where(expression)
+                    .OrderBy(keySelector)
+                    .Take(take)
+                    .Skip(skip)
+                    .ToArrayAsync(cancellationToken);
+        }
+
+        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression,
+            CancellationToken cancellationToken)
         {
             return Items.SingleAsync(expression, cancellationToken);
         }
@@ -55,7 +84,8 @@ namespace PetSearch.Repositories
             return Items.CountAsync(expression, cancellationToken);
         }
 
-        public Task<TResult[]> Query<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> query, CancellationToken cancellationToken)
+        public Task<TResult[]> Query<TResult>(Func<IQueryable<TEntity>, IQueryable<TResult>> query,
+            CancellationToken cancellationToken)
         {
             return query(Items).ToArrayAsync(cancellationToken);
         }

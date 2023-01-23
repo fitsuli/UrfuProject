@@ -70,7 +70,6 @@ export const GeocodeSearch: React.FC<{
     return <>
         <Autocomplete
             fullWidth
-            filterOptions={(x) => x}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.metaDataProperty.GeocoderMetaData.text
             }

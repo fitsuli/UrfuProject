@@ -52,7 +52,7 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
           <SnackbarProvider anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'right',
           }} TransitionComponent={Grow}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>

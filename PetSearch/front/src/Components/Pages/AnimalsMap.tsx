@@ -8,10 +8,14 @@ import { useAnimalsQuery } from "../../QueryFetches/ApiHooks";
 import { CircularProgressStyle } from "../../Styles/SxStyles";
 import { ErrorPage } from "./ErrorPage";
 import { FilterPopover } from "../Common/FilterPopover";
+import { BuildQuery } from "../Common/QueryBuilder";
+import { AnimalFilterType } from "../../Models/AnimalFilterType";
 
 export const AnimalsMap: React.FC = () => {
     const [animalVariant, setAnimalVariant] = useState(AnimalVariant.Lost)
-    const { data: animals, isLoading, isError } = useAnimalsQuery(animalVariant)
+    const [animalFilterType, setAnimalFilterType] = useState<AnimalFilterType | null>(null)
+    const [query, setQuery] = useState(BuildQuery(true, null, animalFilterType))
+    const { data: animals, isLoading, isError } = useAnimalsQuery(animalVariant, query)
     const theme = useTheme()
     const [mapState, setMapState] = useState(
         {
@@ -20,6 +24,12 @@ export const AnimalsMap: React.FC = () => {
             controls: ['zoomControl']
         }
     )
+
+    const onSearch = (variant: AnimalVariant, animalFilterType: AnimalFilterType | null) => {
+        setAnimalVariant(variant);
+        setAnimalFilterType(animalFilterType)
+        setQuery(BuildQuery(true, null, animalFilterType))
+    }
 
     const placemarks = useMemo(() => animals?.map(animal => {
         let feature: Feature = {
@@ -82,7 +92,7 @@ export const AnimalsMap: React.FC = () => {
                 <Typography variant={"h4"}>Карта потерянных питомцев</Typography> :
                 <Typography variant={"h4"}>Карта найденных питомцев</Typography>}
 
-            <FilterPopover onFilter={(variant: AnimalVariant) => setAnimalVariant(variant)}/>
+            <FilterPopover onFilter={onSearch}/>
         </Stack>
         <Stack direction={"row"} spacing={3} maxHeight={"100%"}>
             <Card sx={{

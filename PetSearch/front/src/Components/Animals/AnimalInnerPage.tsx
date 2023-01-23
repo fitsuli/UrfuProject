@@ -82,7 +82,7 @@ export const AnimalInnerPage: React.FC = () => {
                 <Typography variant="h4">Нашлась {animal?.animalType.toLowerCase()}</Typography>
             }
 
-            {auth.user.id == animal?.userId && !animal?.isClosed && <Button variant="outlined"
+            {auth.user.id == animal?.userId && !animal?.isClosed && <Button variant="outlined" color="error"
                 onClick={() => setModalVisible(true)}>Закрыть объявление</Button>}
 
             {animal?.isClosed && <Chip sx={{

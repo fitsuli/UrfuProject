@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetSearch.Common;
 using PetSearch.Common.Extensions;
 using PetSearch.Models;
 using PetSearch.Models.DTO;
@@ -6,22 +7,54 @@ using PetSearch.Services.Abstractions;
 
 namespace PetSearch.Controllers;
 
-public abstract class AnimalControllerBase<TAnimal> : ControllerBase 
+public abstract class AnimalControllerBase<TAnimal> : ControllerBase
     where TAnimal : Animal
 {
     private readonly IAnimalService<TAnimal> animalService;
-    
-    public AnimalControllerBase(IAnimalService<TAnimal> animalService)
+
+    protected AnimalControllerBase(IAnimalService<TAnimal> animalService)
     {
         this.animalService = animalService;
     }
-    
+
     [HttpGet]
-    public async Task<ActionResult> GetAll()
+    public async Task<ActionResult> GetAll([FromQuery] string? sortType,
+        [FromQuery] string? animalType,
+        [FromQuery] string? city,
+        [FromQuery] int take = 100,
+        [FromQuery] int skip = 0)
     {
-        var lostAnimals = await animalService.GetAnimals();
-        var result = lostAnimals.Select(animal => new AnimalEntityDto(animal));
+        /*if (take >= 20)
+            return BadRequest();*/
+
+        var searchSpecification = Specification<TAnimal>.Empty();
+        if (!string.IsNullOrEmpty(city))
+        {
+            searchSpecification =
+                searchSpecification.And(new Specification<TAnimal>(animal => animal.LostAddressCity == city));
+        }
+
+        if (!string.IsNullOrEmpty(animalType))
+        {
+            if (animalType == "Другой")
+                searchSpecification = searchSpecification.And(new Specification<TAnimal>(animal =>
+                    animal.AnimalType != "Кошка" && animal.AnimalType != "Собака"));
+            else
+                searchSpecification =
+                    searchSpecification.And(new Specification<TAnimal>(animal => animal.AnimalType == animalType));
+        }
+
+        var sortDesc = sortType != "asc";
+        var animals = await animalService.GetAnimals(searchSpecification.IsSatisfiedBy(), sortDesc, take, skip);
+        var result = animals.Select(animal => new AnimalEntityDto(animal));
         return Ok(result);
+    }
+
+    [HttpGet("cities")]
+    public async Task<ActionResult> GetAnimalsCities()
+    {
+        var animalsCities = await animalService.GetAnimalsCities();
+        return Ok(animalsCities);
     }
 
     [HttpGet("{animalId}")]
@@ -30,7 +63,7 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         var lostAnimal = await animalService.GetAnimal(animalId);
         if (lostAnimal == null)
             return NotFound();
-        
+
         return Ok(new AnimalEntityDto(lostAnimal));
     }
 
@@ -40,7 +73,7 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         var userId = HttpContext.GetUserId();
         if (userId == null)
             return BadRequest();
-        
+
         var createResult = await animalService.CreateAnimal(createAnimalDto, userId.Value);
         if (!createResult.IsSuccessful)
         {
@@ -56,7 +89,7 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         var userId = HttpContext.GetUserId();
         if (userId == null)
             return BadRequest();
-        
+
         var lostAnimalEntity = await animalService.GetAnimal(animalId);
         if (lostAnimalEntity == null)
             return NotFound("Lost animal not found");
@@ -74,7 +107,7 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         var userId = HttpContext.GetUserId();
         if (userId == null)
             return BadRequest();
-        
+
         var lostAnimalEntity = await animalService.GetAnimal(animalId);
         if (lostAnimalEntity == null)
             return NotFound("Lost animal not found");
@@ -85,7 +118,7 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         var result = await animalService.DeleteAnimal(animalId);
         if (!result.IsSuccessful)
             return StatusCode(result.HttpStatusCode.Value);
-        
+
         return Ok(lostAnimalEntity);
     }
 }

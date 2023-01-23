@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { Box, Divider, Popover, Typography, IconButton, Stack, ToggleButtonGroup, ToggleButton, Button } from '@mui/material';
+import { Divider, Popover, Typography, IconButton, Stack, ToggleButtonGroup, ToggleButton, Button } from '@mui/material';
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import { AnimalVariant } from "../../Models/AnimalVariant";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
@@ -8,7 +8,7 @@ import { AnimalFilterType } from '../../Models/AnimalFilterType';
 
 
 export const FilterPopover: React.FC<{
-    onFilter: (animalVariant: AnimalVariant) => void
+    onFilter: (animalVariant: AnimalVariant, animalFilterType: AnimalFilterType | null) => void
 }> = ({ onFilter }) => {
     const [open, setOpen] = useState(null);
 
@@ -21,8 +21,7 @@ export const FilterPopover: React.FC<{
     };
 
     const [animalVariant, setAnimalVariant] = useState(AnimalVariant.Lost);
-    const [animalFilter, setAnimalFilter] = useState(AnimalFilterType.Cat);
-
+    const [animalFilter, setAnimalFilter] = useState<AnimalFilterType | null>(null);
 
     return <>
         <IconButton
@@ -61,7 +60,6 @@ export const FilterPopover: React.FC<{
                 sx: {
                     p: 0,
                     mt: 1.5,
-                    //ml: 0.75,
                     width: 350,
                     '& .MuiMenuItem-root': {
                         typography: 'body2',
@@ -94,11 +92,7 @@ export const FilterPopover: React.FC<{
                 <Typography variant="subtitle1" noWrap>Вид питомца</Typography>
                 <Stack direction="row" spacing={1}>
                     <ToggleButtonGroup fullWidth sx={{ justifyContent: "center" }} color="primary" size="large" value={animalFilter} exclusive={true}
-                        onChange={(event, value) => {
-                            if (value !== null) {
-                                setAnimalFilter(value)
-                            }
-                        }}>
+                        onChange={(event, value) => {setAnimalFilter(value)}}>
                         <ToggleButton value={AnimalFilterType.Cat} key={AnimalFilterType.Cat}>
                             Кошка
                         </ToggleButton>
@@ -118,7 +112,7 @@ export const FilterPopover: React.FC<{
                 <Button startIcon={<CheckRoundedIcon />}
                     variant="contained" onClick={() => {
                         handleClose()
-                        onFilter(animalVariant)
+                        onFilter(animalVariant, animalFilter)
                     }} sx={{ m: 2 }}>
                     Применить
                 </Button>

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq.Expressions;
+using System.Net;
 using PetSearch.Common;
 using PetSearch.Models;
 using PetSearch.Models.DTO;
@@ -20,9 +21,21 @@ public abstract class AnimalServiceBase<TAnimal> : IAnimalService<TAnimal>
         this.fileProvider = fileProvider;
     }
 
-    public async Task<IEnumerable<TAnimal>> GetAnimals()
+    public async Task<IEnumerable<TAnimal>> GetAnimals(Expression<Func<TAnimal, bool>> expression, bool sortDesc, int take, int skip)
     {
-        return await repository.Query(animal => animal, CancellationToken.None);
+        return await repository.ListWithOrderAsync(expression,
+            animal => animal.LostDate,
+            sortDesc,
+            take,
+            skip,
+            CancellationToken.None);
+    }
+
+    public async Task<IEnumerable<string>> GetAnimalsCities()
+    {
+        var animals = await repository.ListAsync(animal => animal.LostAddressCity != null,
+            animal => animal.LostAddressCity, CancellationToken.None);
+        return animals.Distinct()!;
     }
 
     public async Task<TAnimal?> GetAnimal(Guid id)
@@ -39,7 +52,7 @@ public abstract class AnimalServiceBase<TAnimal> : IAnimalService<TAnimal>
             return OperationResult<AnimalEntityDto>.Failure(uploadFilesResult.ErrorMessage);
 
         var fileNames = uploadFilesResult.Result;
-        
+
         var animal = new TAnimal
         {
             AnimalName = createAnimalDto.AnimalName,
@@ -56,7 +69,7 @@ public abstract class AnimalServiceBase<TAnimal> : IAnimalService<TAnimal>
             UserId = userId,
             FileNames = string.Join(";", fileNames)
         };
-        
+
         try
         {
             var result = await repository.AddAsync(animal, CancellationToken.None);
@@ -81,7 +94,7 @@ public abstract class AnimalServiceBase<TAnimal> : IAnimalService<TAnimal>
         var animal = await repository.SingleOrDefaultAsync(animal => animal.Id == id, CancellationToken.None);
         if (animal == null)
             return OperationResult.Failure("Entity not found", (int)HttpStatusCode.NotFound);
-        
+
         await repository.RemoveAsync(animal);
         await repository.SaveChangesAsync();
         return OperationResult.Success();

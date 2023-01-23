@@ -52,7 +52,7 @@ export const SignUp = () => {
     return <div className="auth-container">
             <Card variant={"outlined"} className="auth-card" sx={BackgroundTintStyle}>
                 <div className="auth">
-                    <TextField label="ФИО" onChange={handleChange("fullName")} id={"fullName"}/>
+                    <TextField label="Имя" onChange={handleChange("fullName")} id={"fullName"}/>
                     <TextField label="Логин" onChange={handleChange("login")} id={"login"}/>
                     <TextField label="Пароль" onChange={handleChange("password")} type="password" id={"password"}/>
                     <RadioGroup
