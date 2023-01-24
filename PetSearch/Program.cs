@@ -109,6 +109,7 @@ public static class Program
         {
             var connectionString = configuration.GetConnectionString("Postgres");
             optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.EnableSensitiveDataLogging();
         });
 
         services.AddScoped<IAuthRepository, AuthRepository>();

@@ -46,13 +46,13 @@ namespace PetSearch.Repositories
             return sortDesc
                 ? Items.Where(expression)
                     .OrderByDescending(keySelector)
-                    .Take(take)
                     .Skip(skip)
+                    .Take(take)
                     .ToArrayAsync(cancellationToken)
                 : Items.Where(expression)
                     .OrderBy(keySelector)
-                    .Take(take)
                     .Skip(skip)
+                    .Take(take)
                     .ToArrayAsync(cancellationToken);
         }
 

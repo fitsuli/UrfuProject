@@ -14,7 +14,7 @@ import { AnimalFilterType } from "../../Models/AnimalFilterType";
 export const AnimalsMap: React.FC = () => {
     const [animalVariant, setAnimalVariant] = useState(AnimalVariant.Lost)
     const [animalFilterType, setAnimalFilterType] = useState<AnimalFilterType | null>(null)
-    const [query, setQuery] = useState(BuildQuery(true, null, animalFilterType))
+    const [query, setQuery] = useState(BuildQuery(true, 100, 0, null, animalFilterType))
     const { data: animals, isLoading, isError } = useAnimalsQuery(animalVariant, query)
     const theme = useTheme()
     const [mapState, setMapState] = useState(
@@ -28,7 +28,7 @@ export const AnimalsMap: React.FC = () => {
     const onSearch = (variant: AnimalVariant, animalFilterType: AnimalFilterType | null) => {
         setAnimalVariant(variant);
         setAnimalFilterType(animalFilterType)
-        setQuery(BuildQuery(true, null, animalFilterType))
+        setQuery(BuildQuery(true, 100, 0, null, animalFilterType))
     }
 
     const placemarks = useMemo(() => animals?.map(animal => {
@@ -94,7 +94,7 @@ export const AnimalsMap: React.FC = () => {
 
             <FilterPopover onFilter={onSearch}/>
         </Stack>
-        <Stack direction={"row"} spacing={3} maxHeight={"100%"}>
+        <Stack direction={"row"} spacing={3} height={"100%"}>
             <Card sx={{
                 flexBasis: '30%',
                 overflowY: "scroll",
