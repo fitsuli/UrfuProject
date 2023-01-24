@@ -1,8 +1,10 @@
 import { AnimalFilterType } from "../../Models/AnimalFilterType";
 import { AnimalVariant } from "../../Models/AnimalVariant";
 
-export const BuildQuery = (sortDesc: boolean, city: string | null, animalFilterType: AnimalFilterType | null) => {
+export const BuildQuery = (sortDesc: boolean, take : number, skip: number, city: string | null, animalFilterType: AnimalFilterType | null) => {
     let query = sortDesc ? "?sortType=desc" : "?sortType=asc"
+    query += `&take=${take}`
+    query += `&skip=${skip}`
 
     if (city) {
         query += `&city=${city}`

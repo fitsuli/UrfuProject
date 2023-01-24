@@ -10,7 +10,7 @@ import { GetAnimalsCollectionName } from "../Components/Common/QueryBuilder"
 export const useAnimalsQuery = (variant : AnimalVariant, query: string) => {
     const animalsCollection = GetAnimalsCollectionName(variant);
 
-    return useQuery<Animal[], AxiosError>([animalsCollection, query], async () => {
+    return useQuery<Animal[], AxiosError>([animalsCollection, {query: query}], async () => {
         const result = await axios.get(animalsCollection + query);
         return result.data;
     }, { retry: false })

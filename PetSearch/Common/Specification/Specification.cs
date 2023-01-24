@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using PetSearch.Models;
 
-namespace PetSearch.Common;
+namespace PetSearch.Common.Specification;
 
 public class Specification<TEntity> : ISpecification<TEntity> where TEntity : BaseEntity
 {

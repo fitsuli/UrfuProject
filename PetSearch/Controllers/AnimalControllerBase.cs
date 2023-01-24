@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetSearch.Common;
 using PetSearch.Common.Extensions;
+using PetSearch.Common.Specification;
 using PetSearch.Models;
 using PetSearch.Models.DTO;
 using PetSearch.Services.Abstractions;
@@ -24,9 +25,6 @@ public abstract class AnimalControllerBase<TAnimal> : ControllerBase
         [FromQuery] int take = 100,
         [FromQuery] int skip = 0)
     {
-        /*if (take >= 20)
-            return BadRequest();*/
-
         var searchSpecification = Specification<TAnimal>.Empty();
         if (!string.IsNullOrEmpty(city))
         {

@@ -1,13 +1,15 @@
-import { Autocomplete, Box, Button, Card, CircularProgress, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography, useTheme } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CircularProgress, Pagination, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography, useTheme } from "@mui/material";
 import React from "react";
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { AnimalFilterType } from "../../Models/AnimalFilterType";
 import { AnimalVariant } from "../../Models/AnimalVariant";
 import { useAnimalsCitiesQuery } from "../../QueryFetches/ApiHooks";
 import { CircularProgressStyle } from "../../Styles/SxStyles";
 import { BuildQuery } from "../Common/QueryBuilder";
 import { AnimalsGrid } from "../Animals/AnimalsGrid";
+
+const ANIMALS_ON_PAGE = 12
 
 export const AnimalsPage: React.FC<{
     variant: AnimalVariant;
@@ -16,17 +18,25 @@ export const AnimalsPage: React.FC<{
     const [inputValue, setInputValue] = useState('')
     const [cityValue, setCityValue] = useState<string>('')
     const [animalFilter, setAnimalFilter] = useState<AnimalFilterType | null>(null)
-    const [query, setQuery] = useState(BuildQuery(sortDesc, cityValue, animalFilter))
+    const [page, setPage] = useState(1)
+    const [query, setQuery] = useState(BuildQuery(sortDesc, ANIMALS_ON_PAGE, 0, cityValue, animalFilter))
     const { data: cities, isLoading: isCitiesLoading } = useAnimalsCitiesQuery(variant)
+
+    const theme = useTheme()
 
     if (isCitiesLoading) {
         return <CircularProgress sx={CircularProgressStyle} />
     }
-    
-    const theme = useTheme()
 
-    const onSearch = () => {
-        setQuery(BuildQuery(sortDesc, cityValue, animalFilter))
+
+    const onFilterChange = (newPage: number | null) => {
+        if (newPage != null){
+            setQuery(BuildQuery(sortDesc, ANIMALS_ON_PAGE, ANIMALS_ON_PAGE * (newPage - 1), cityValue, animalFilter))
+            setPage(newPage)
+        }
+        else {
+            setQuery(BuildQuery(sortDesc, ANIMALS_ON_PAGE, ANIMALS_ON_PAGE * (page - 1), cityValue, animalFilter))
+        }
     }
 
     return <>
@@ -67,7 +77,7 @@ export const AnimalsPage: React.FC<{
                             size="large"
                             value={animalFilter}
                             exclusive={true}
-                            onChange={(event, value) => {setAnimalFilter(value)}}>
+                            onChange={(event, value) => { setAnimalFilter(value) }}>
                             <ToggleButton value={AnimalFilterType.Cat} key={AnimalFilterType.Cat}>
                                 Кошка
                             </ToggleButton>
@@ -102,11 +112,18 @@ export const AnimalsPage: React.FC<{
                                 </Stack>
                             </Box>
                         </Stack>
-                        <Button sx={{ height: "100%", borderRadius: 3 }} startIcon={<SearchRoundedIcon />} variant="outlined" onClick={onSearch}>Найти</Button>
+                        <Button sx={{ height: "100%", borderRadius: 3 }} startIcon={<SearchRoundedIcon />} variant="outlined" onClick={() => onFilterChange(null)}>Найти</Button>
                     </Stack>
                 </Stack>
             </Card>
         </Stack>
         <AnimalsGrid query={query} variant={variant} />
+        <Pagination sx={{
+            pt: "36px", marginX: "auto",
+        }}
+            count={3} color={'primary'}
+            hidePrevButton
+            page={page}
+            onChange={(event, page) => onFilterChange(page)} />
     </>
 }
