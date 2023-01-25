@@ -12,7 +12,7 @@ export const FilterPopover: React.FC<{
 }> = ({ onFilter }) => {
     const [open, setOpen] = useState(null);
 
-    const handleOpen = (event) => {
+    const handleOpen = (event : any) => {
         setOpen(event.currentTarget);
     };
 
@@ -94,13 +94,13 @@ export const FilterPopover: React.FC<{
                     <ToggleButtonGroup fullWidth sx={{ justifyContent: "center" }} color="primary" size="large" value={animalFilter} exclusive={true}
                         onChange={(event, value) => {setAnimalFilter(value)}}>
                         <ToggleButton value={AnimalFilterType.Cat} key={AnimalFilterType.Cat}>
-                            Кошка
+                            Кошки
                         </ToggleButton>
                         <ToggleButton value={AnimalFilterType.Dog} key={AnimalFilterType.Dog}>
-                            Собака
+                            Собаки
                         </ToggleButton>
                         <ToggleButton value={AnimalFilterType.Other} key={AnimalFilterType.Other}>
-                            Другой
+                            Другие
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </Stack>

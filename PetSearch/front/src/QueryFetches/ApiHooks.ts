@@ -13,7 +13,7 @@ export const useAnimalsQuery = (variant : AnimalVariant, query: string) => {
     return useQuery<Animal[], AxiosError>([animalsCollection, {query: query}], async () => {
         const result = await axios.get(animalsCollection + query);
         return result.data;
-    }, { retry: false })
+    }, { retry: false})
 }
 
 export const useAnimalQuery = (variant : AnimalVariant, animalId: string) => {

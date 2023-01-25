@@ -27,7 +27,7 @@ export const AnimalCard: React.FC<{
         }}>
             <Box sx={{
                 height: "300px",
-                backgroundImage: animal.fileNames?.length ? `url(/AnimalsImages/${animal.fileNames[0]})` : "url(https://www.freeiconspng.com/thumbs/animal-icon-png/animal-paw-vector-icon-animals-icons-icons-download-0.png)",
+                backgroundImage: animal.fileNames?.length && `url(/AnimalsImages/${animal.fileNames[0]})`,
                 backgroundPosition: "center center",
                 backgroundSize: "cover",
                 opacity: animal.isClosed ? "0.5" : "1"

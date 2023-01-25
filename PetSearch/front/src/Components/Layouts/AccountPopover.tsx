@@ -10,7 +10,7 @@ export const AccountPopover: React.FC = () => {
     const navigate = useNavigate();
     const auth = useAuth();
 
-    const handleOpen = (event) => {
+    const handleOpen = (event: any) => {
         setOpen(event.currentTarget);
     };
 

@@ -9,7 +9,7 @@ import { CircularProgressStyle } from "../../Styles/SxStyles";
 import { BuildQuery } from "../Common/QueryBuilder";
 import { AnimalsGrid } from "../Animals/AnimalsGrid";
 
-const ANIMALS_ON_PAGE = 12
+const ANIMALS_ON_PAGE = 8
 
 export const AnimalsPage: React.FC<{
     variant: AnimalVariant;
@@ -79,13 +79,13 @@ export const AnimalsPage: React.FC<{
                             exclusive={true}
                             onChange={(event, value) => { setAnimalFilter(value) }}>
                             <ToggleButton value={AnimalFilterType.Cat} key={AnimalFilterType.Cat}>
-                                Кошка
+                                Кошки
                             </ToggleButton>
                             <ToggleButton value={AnimalFilterType.Dog} key={AnimalFilterType.Dog}>
-                                Собака
+                                Собаки
                             </ToggleButton>
                             <ToggleButton value={AnimalFilterType.Other} key={AnimalFilterType.Other}>
-                                Другой
+                                Другие
                             </ToggleButton>
                         </ToggleButtonGroup>
                     </Stack>
@@ -118,11 +118,12 @@ export const AnimalsPage: React.FC<{
             </Card>
         </Stack>
         <AnimalsGrid query={query} variant={variant} />
+        
         <Pagination sx={{
             pt: "36px", marginX: "auto",
         }}
-            count={3} color={'primary'}
-            hidePrevButton
+            count={2} 
+            color={'primary'}
             page={page}
             onChange={(event, page) => onFilterChange(page)} />
     </>

@@ -70,6 +70,7 @@ export const GeocodeSearch: React.FC<{
     return <>
         <Autocomplete
             fullWidth
+            filterOptions={(x) => x}
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.metaDataProperty.GeocoderMetaData.text
             }
@@ -79,6 +80,7 @@ export const GeocodeSearch: React.FC<{
             filterSelectedOptions
             value={value}
             noOptionsText="Опции отсутствуют"
+            //@ts-ignore
             onChange={(event: any, newValue: GeoObject | null) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);

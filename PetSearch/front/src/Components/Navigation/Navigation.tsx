@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar, Button, Stack } from '@mui/material';
-import useResponsive from '../../Hooks/useResponsive';
 import stringAvatar from '../../Utils/AvatarString';
 import Logo from '../Logo';
 import { useAuth } from '../Auth/AuthProvider';
@@ -22,8 +21,6 @@ const StyledAccount = styled('div')(({ theme }) => ({
 
 export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onCloseNav: () => void }) {
   const { pathname } = useLocation();
-  //@ts-ignore
-  const isDesktop = useResponsive('up', 'lg');
   const auth = useAuth()
   const theme = useTheme()
   const user = auth.user
@@ -76,7 +73,7 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
         margin: 4,
         width: NAV_WIDTH - 64
       }}
-        variant={"outlined"} 
+        variant={"outlined"}
         onClick={() => auth.signOut()}>
         Выйти
       </Button>
@@ -91,34 +88,19 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onClose
         width: { lg: NAV_WIDTH },
       }}
     >
-      {isDesktop ? (
-        <Drawer
-          open
-          variant="permanent"
-          PaperProps={{
-            sx: {
-              width: NAV_WIDTH,
-              bgcolor: 'background.default',
-              borderRightStyle: 'dashed',
-            },
-          }}
-        >
-          {renderContent}
-        </Drawer>
-      ) : (
-        <Drawer
-          open={openNav}
-          onClose={onCloseNav}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          PaperProps={{
-            sx: { width: NAV_WIDTH },
-          }}
-        >
-          {renderContent}
-        </Drawer>
-      )}
+      <Drawer
+        open
+        variant="permanent"
+        PaperProps={{
+          sx: {
+            width: NAV_WIDTH,
+            bgcolor: 'background.default',
+            borderRightStyle: 'dashed',
+          },
+        }}
+      >
+        {renderContent}
+      </Drawer>
     </Box>
   );
 }
